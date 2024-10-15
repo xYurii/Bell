@@ -12,12 +12,17 @@ import (
 	"github.com/servusdei2018/shards/v2"
 	_ "github.com/xYurii/Bell/src/commands"
 	"github.com/xYurii/Bell/src/events"
+	"github.com/xYurii/Bell/src/utils"
 )
 
 func main() {
 	if err := godotenv.Load(); err != nil {
 		log.Fatalf("Error loading .env file")
 	}
+
+	// load the asura roosters effects and cosmetics:
+	utils.GetCosmetics()
+	utils.GetEffects()
 
 	conn := fmt.Sprintf("Bot %s", os.Getenv("DISCORD_CLIENT_TOKEN"))
 	s, _ := shards.New(conn)

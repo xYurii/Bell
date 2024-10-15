@@ -28,8 +28,8 @@ func Find[T any](arr []T, callback func(T) bool) T {
 	return zero
 }
 
-func Map[T any](arr []T, callback func(T) T) []T {
-	result := make([]T, len(arr))
+func Map[T any, R any](arr []T, callback func(T) R) []R {
+	result := make([]R, len(arr))
 	for i, v := range arr {
 		result[i] = callback(v)
 	}

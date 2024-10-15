@@ -3,6 +3,7 @@ package commands
 import (
 	"context"
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
@@ -51,6 +52,18 @@ func runAsuraRooster(_ context.Context, s *discordgo.Session, m *discordgo.Messa
 	}
 
 	roosterName := args[0]
+	resets := 0
+
+	if len(args) > 1 {
+		var err error
+		resets, err = strconv.Atoi(args[1])
+		if err != nil {
+			resets = 0
+		}
+		if resets < 0 {
+			resets = 0
+		}
+	}
 
 	if roosterName == "" {
 		response.Content = "Você deve informar o nome do galo que deseja visualizar!"
@@ -58,7 +71,7 @@ func runAsuraRooster(_ context.Context, s *discordgo.Session, m *discordgo.Messa
 		return
 	}
 
-	roosters, err := utils.GetJSON("https://raw.githubusercontent.com/Acnologla/asura/master/resources/galo/class.json")
+	roosters, err := utils.GetRoostersClasses("https://raw.githubusercontent.com/Acnologla/asura/master/resources/galo/class.json")
 
 	if err != nil {
 		response.Content = "Eu não consegui buscar a lista dos nomes dos galos... Tente novamente."
@@ -91,28 +104,98 @@ func runAsuraRooster(_ context.Context, s *discordgo.Session, m *discordgo.Messa
 
 	embed := &discordgo.MessageEmbed{
 		Title: fmt.Sprintf("Galo **%s**", rooster.Name),
-		Color: utils.GetRarityColor(rooster.Rarity),
+		Color: rooster.Rarity.Color(),
 		Image: &discordgo.MessageEmbedImage{
-			URL: roosterImg.(string),
+			URL: roosterImg,
 		},
 	}
 
 	response.Embeds = []*discordgo.MessageEmbed{embed}
 	response.Components = buttons
 
-	/*message, _ := */
-	s.ChannelMessageSendComplex(m.ChannelID, response)
+	message, _ := s.ChannelMessageSendComplex(m.ChannelID, response)
 
-	// handler.CreateMessageComponentCollector(message, func(i *discordgo.Interaction) {
-	// 	switch i.MessageComponentData().CustomID {
-	// 	case "skins":
-	// 		fmt.Println("skins", rooster)
-	// 	case "skills":
-	// 		fmt.Println("skills", rooster)
-	// 	}
-	// }, 0)
+	handler.CreateMessageComponentCollector(message, func(i *discordgo.Interaction) {
+		switch i.MessageComponentData().CustomID {
+		case "skins":
+			ShowRoosterSkins(s, i, &rooster, roosterIndex)
+		case "skills":
+			skills := ShowRoosterSkills(s, i, &rooster, float64(resets))
+
+			embed := &discordgo.MessageEmbed{
+				Title:       fmt.Sprintf("%s - Resets: %d", rooster.Name, resets),
+				Color:       rooster.Rarity.Color(),
+				Description: skills,
+			}
+
+			response := &discordgo.InteractionResponse{
+				Type: discordgo.InteractionResponseChannelMessageWithSource,
+				Data: &discordgo.InteractionResponseData{
+					Embeds: []*discordgo.MessageEmbed{embed},
+					Flags:  discordgo.MessageFlagsEphemeral,
+				},
+			}
+			s.InteractionRespond(i, response)
+		}
+	}, 0)
 }
 
-func ShowRoosterSkins(s *discordgo.Session, i *discordgo.Interaction, rooster *utils.Class) {
+func ShowRoosterSkills(s *discordgo.Session, i *discordgo.Interaction, rooster *utils.Class, resets float64) string {
+	skills, _ := utils.GetRoosterSkills(rooster)
+	skillsMap := prototypes.Map(skills, func(skill *utils.Skill) string {
+		min, max := utils.CalcDamage(skill.Damage[0], skill.Damage[1], resets)
+		text := fmt.Sprintf("%s [**%d**]: **%d** - **%d**", skill.Name, skill.Level, min, max)
 
+		if skill.Effect[0] != 0 || skill.Effect[1] != 0 {
+			effect := utils.Effects[int(skill.Effect[1])]
+			minEffect, maxEffect := utils.CalcDamage(effect.Range[0], effect.Range[1], resets)
+			text += fmt.Sprintf("\n*Tem %d%% de Chance de causar %s* **%d** - **%d**", int(skill.Effect[0]*100), effect.Name, minEffect, maxEffect)
+		}
+
+		return text
+	})
+
+	var text string
+	for _, skill := range skillsMap {
+		text += skill + "\n\n"
+	}
+
+	return text
+}
+
+func ShowRoosterSkins(s *discordgo.Session, i *discordgo.Interaction, rooster *utils.Class, roosterIndex int) {
+	var embeds []*discordgo.MessageEmbed
+
+	for _, c := range utils.Cosmetics {
+		if c.Extra == roosterIndex {
+			embed := &discordgo.MessageEmbed{
+				Title: c.Name,
+				Color: c.Rarity.Color(),
+				Image: &discordgo.MessageEmbedImage{
+					URL: c.Value,
+				},
+			}
+			embeds = append(embeds, embed)
+		}
+	}
+
+	if len(embeds) > 0 {
+		response := &discordgo.InteractionResponse{
+			Type: discordgo.InteractionResponseChannelMessageWithSource,
+			Data: &discordgo.InteractionResponseData{
+				Embeds: embeds,
+				Flags:  discordgo.MessageFlagsEphemeral,
+			},
+		}
+		s.InteractionRespond(i, response)
+	} else {
+		response := &discordgo.InteractionResponse{
+			Type: discordgo.InteractionResponseChannelMessageWithSource,
+			Data: &discordgo.InteractionResponseData{
+				Content: "Nenhuma skin encontrada.",
+				Flags:   discordgo.MessageFlagsEphemeral,
+			},
+		}
+		s.InteractionRespond(i, response)
+	}
 }
