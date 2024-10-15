@@ -9,6 +9,25 @@ func Includes[T any](arr []T, callback func(T) bool) bool {
 	return false
 }
 
+func FindIndex[T any](arr []T, callback func(T) bool) int {
+	for i, v := range arr {
+		if callback(v) {
+			return i
+		}
+	}
+	return -1
+}
+
+func Find[T any](arr []T, callback func(T) bool) T {
+	for _, v := range arr {
+		if callback(v) {
+			return v
+		}
+	}
+	var zero T
+	return zero
+}
+
 func Map[T any](arr []T, callback func(T) T) []T {
 	result := make([]T, len(arr))
 	for i, v := range arr {
