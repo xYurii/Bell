@@ -36,6 +36,6 @@ func main() {
 	<-sigch
 
 	if err := s.Shutdown(); err != nil {
-		log.Printf("could not close session gracefully: %s", err)
+		log.Printf("could not close session: %s", err)
 	}
 }
