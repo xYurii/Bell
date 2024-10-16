@@ -45,8 +45,21 @@ func runAsuraRooster(_ context.Context, s *discordgo.Session, m *discordgo.Messa
 		},
 	}
 
+	buttonsWithValidRoostersNames := []discordgo.MessageComponent{
+		discordgo.ActionsRow{
+			Components: []discordgo.MessageComponent{
+				discordgo.Button{
+					Label:    "Nome de todos os Galos",
+					Style:    discordgo.PrimaryButton,
+					CustomID: "allRoostersNames",
+				},
+			},
+		},
+	}
+
 	if len(args) == 0 {
 		response.Content = "Você não informou o nome do galo que deseja visualizar!"
+		response.Components = buttonsWithValidRoostersNames
 		s.ChannelMessageSendComplex(m.ChannelID, response)
 		return
 	}
@@ -67,6 +80,7 @@ func runAsuraRooster(_ context.Context, s *discordgo.Session, m *discordgo.Messa
 
 	if roosterName == "" {
 		response.Content = "Você deve informar o nome do galo que deseja visualizar!"
+		response.Components = buttonsWithValidRoostersNames
 		s.ChannelMessageSendComplex(m.ChannelID, response)
 		return
 	}
@@ -75,6 +89,7 @@ func runAsuraRooster(_ context.Context, s *discordgo.Session, m *discordgo.Messa
 
 	if err != nil {
 		response.Content = "Eu não consegui buscar a lista dos nomes dos galos... Tente novamente."
+
 		s.ChannelMessageSendComplex(m.ChannelID, response)
 		return
 	}
@@ -86,6 +101,7 @@ func runAsuraRooster(_ context.Context, s *discordgo.Session, m *discordgo.Messa
 
 	if !roosterExists {
 		response.Content = fmt.Sprintf("O galo **%s** não existe!", roosterName)
+		response.Components = buttonsWithValidRoostersNames
 		s.ChannelMessageSendComplex(m.ChannelID, response)
 		return
 	}

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"math"
 	"net/http"
 	"sync"
 )
@@ -99,6 +100,17 @@ var skillsCache = struct {
 	data map[string][]*Skill
 }{
 	data: make(map[string][]*Skill),
+}
+
+func CalcLevel(xp int) int {
+	return int(math.Floor(math.Sqrt(float64(xp)/30))) + 1
+}
+
+func CalcXP(level int) int {
+	if 0 >= level {
+		return 1
+	}
+	return int(math.Pow(float64(level-1), 2)) * 30
 }
 
 func GetCosmetics() ([]*Cosmetic, error) {
@@ -216,10 +228,6 @@ func GetRoosterSkills(rooster *Class) ([]*Skill, error) {
 	skillsCache.Unlock()
 
 	return skills, nil
-}
-
-func GetRarityColor(rarity int) int {
-	return [...]int{13493247, 255, 9699539, 16748544, 16728128, 16777201}[rarity]
 }
 
 func GetRoostersSprites(url string) ([][]string, error) {

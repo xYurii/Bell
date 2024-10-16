@@ -11,6 +11,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/servusdei2018/shards/v2"
 	_ "github.com/xYurii/Bell/src/commands"
+	_ "github.com/xYurii/Bell/src/components"
 	"github.com/xYurii/Bell/src/events"
 	"github.com/xYurii/Bell/src/utils"
 )

@@ -24,5 +24,12 @@ func runPing(_ context.Context, s *discordgo.Session, m *discordgo.MessageCreate
 
 	res := fmt.Sprintf("Pong! Shard (**%d**/**%d**)\nGateway Ping: **%dms**", shardId, shardCount, latency)
 
-	s.ChannelMessageSend(m.ChannelID, res)
+	response := &discordgo.MessageSend{
+		Content: res,
+		Reference: &discordgo.MessageReference{
+			MessageID: m.ID,
+		},
+	}
+
+	s.ChannelMessageSendComplex(m.ChannelID, response)
 }

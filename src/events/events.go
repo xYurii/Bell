@@ -5,23 +5,16 @@ import (
 	"fmt"
 	"log"
 	"strings"
+	"sync"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/xYurii/Bell/src/handler"
 )
 
+var mutex sync.RWMutex
+
 func OnReady(s *discordgo.Session, r *discordgo.Ready) {
 	log.Printf("[SHARD: %v] logged in as %s", s.ShardID, r.User.String())
-}
-
-func OnInteractionCreate(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	if i.Type == discordgo.InteractionMessageComponent {
-		if collector, exists := handler.GetMessageComponentCollector(i.Message); exists {
-			go collector.Callback(i.Interaction)
-		} else {
-			handler.RespondInteraction(s, i.Interaction, discordgo.InteractionResponseChannelMessageWithSource, "Os dados desta interação foram perdidos... tente usar o comando novamente!", discordgo.MessageFlagsEphemeral)
-		}
-	}
 }
 
 func OnMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {

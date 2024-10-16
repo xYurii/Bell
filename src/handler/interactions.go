@@ -16,3 +16,9 @@ func RespondInteraction(s *discordgo.Session, i *discordgo.Interaction, response
 
 	return s.InteractionRespond(i, response)
 }
+
+func DeferInteraction(s *discordgo.Session, i *discordgo.Interaction) error {
+	return s.InteractionRespond(i, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
+	})
+}

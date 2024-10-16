@@ -8,61 +8,74 @@ import (
 )
 
 type Collector struct {
-	Callback func(*discordgo.Interaction)
-	Timeout  *time.Time
+	Callback   func(*discordgo.Interaction)
+	Timeout    *time.Time
+	deleteChan chan bool
+	sync.Mutex
 }
 
-var Collectors = map[string]Collector{}
-var mu sync.Mutex
+var Collectors = map[string]*Collector{}
+var collectorsLock = sync.RWMutex{}
 
 func CreateMessageComponentCollector(msg *discordgo.Message, callback func(*discordgo.Interaction), timeout time.Duration, onExpire ...func()) {
-	mu.Lock()
-	defer mu.Unlock()
+	collector := &Collector{
+		Callback:   callback,
+		deleteChan: make(chan bool),
+	}
 
-	var expires *time.Time
 	if timeout > 0 {
 		expTime := time.Now().Add(timeout)
-		expires = &expTime
+		collector.Timeout = &expTime
 	}
 
-	Collectors[msg.ID] = Collector{
-		Callback: callback,
-		Timeout:  expires,
-	}
+	collectorsLock.Lock()
+	Collectors[msg.ID] = collector
+	collectorsLock.Unlock()
 
-	if expires != nil {
-		go func() {
-			time.Sleep(timeout)
-			mu.Lock()
-			defer mu.Unlock()
-			onExpire[0]()
-			delete(Collectors, msg.ID)
-		}()
-	}
+	go func() {
+		if timeout > 0 {
+			timeChannel := time.After(timeout)
+			select {
+			case <-collector.deleteChan:
+			case <-timeChannel:
+				collectorsLock.Lock()
+				delete(Collectors, msg.ID)
+				collectorsLock.Unlock()
+				if len(onExpire) > 0 {
+					onExpire[0]()
+				}
+			}
+		} else {
+			<-collector.deleteChan
+		}
+	}()
 }
 
 func DeleteComponentCollector(msg *discordgo.Message) {
-	mu.Lock()
-	defer mu.Unlock()
-
-	delete(Collectors, msg.ID)
+	collectorsLock.Lock()
+	collector, exists := Collectors[msg.ID]
+	if exists {
+		collector.deleteChan <- true
+		delete(Collectors, msg.ID)
+	}
+	collectorsLock.Unlock()
 }
 
 func GetMessageComponentCollector(msg *discordgo.Message) (*Collector, bool) {
-	mu.Lock()
-	defer mu.Unlock()
-
+	collectorsLock.RLock()
 	collector, exists := Collectors[msg.ID]
-	return &collector, exists
+	collectorsLock.RUnlock()
+
+	return collector, exists
 }
 
 func CleanComponentCollectors() {
-	mu.Lock()
-	defer mu.Unlock()
+	collectorsLock.Lock()
+	defer collectorsLock.Unlock()
 
-	for k, v := range Collectors {
-		if v.Timeout != nil && time.Now().After(*v.Timeout) {
-			delete(Collectors, k)
+	for id, collector := range Collectors {
+		if collector.Timeout != nil && time.Now().After(*collector.Timeout) {
+			delete(Collectors, id)
 		}
 	}
 }
