@@ -2,7 +2,6 @@ package handler
 
 import (
 	"context"
-	"fmt"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
@@ -17,7 +16,6 @@ type Component struct {
 var components = map[string]Component{}
 
 func RegisterComponent(component Component) {
-	fmt.Println(component.Name)
 	components[component.Name] = component
 }
 

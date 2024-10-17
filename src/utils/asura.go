@@ -151,7 +151,6 @@ func GetCosmetics() ([]*Cosmetic, error) {
 	}
 
 	Cosmetics = allCosmetics
-	fmt.Printf("Cosmetics Loaded: %d\n", len(Cosmetics))
 
 	return Cosmetics, nil
 }
