@@ -3,11 +3,13 @@ package events
 import (
 	"context"
 	"fmt"
+	"log"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/xYurii/Bell/src/database"
 	"github.com/xYurii/Bell/src/handler"
+	"github.com/xYurii/Bell/src/utils/discord"
 )
 
 func OnMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
@@ -17,10 +19,17 @@ func OnMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	ctx := context.Background()
 	guildData := database.Guild.GetGuild(ctx, m.GuildID)
-	prefix := guildData.Prefix
-	fmt.Printf("%+v", guildData)
+	prefix := strings.ToLower(guildData.Prefix)
 
-	if !strings.HasPrefix(m.Content, prefix) {
+	mentions := m.Mentions
+	if len(mentions) == 1 && mentions[0].ID == s.State.User.ID {
+		_, err := discord.NewMessage(s, m.ChannelID, m.ID).WithContent(fmt.Sprintf("Olá %s! Meu prefixo é **%s**\nPara ver meus comandos, digite **%shelp**!", m.Author.Mention(), prefix, prefix)).Send()
+		if err != nil {
+			log.Fatalln(err)
+		}
+	}
+
+	if !strings.HasPrefix(strings.ToLower(m.Content), prefix) {
 		return
 	}
 

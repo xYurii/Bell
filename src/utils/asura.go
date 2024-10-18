@@ -6,6 +6,7 @@ import (
 	"io"
 	"math"
 	"net/http"
+	"sort"
 	"sync"
 )
 
@@ -100,6 +101,26 @@ var skillsCache = struct {
 	data map[string][]*Skill
 }{
 	data: make(map[string][]*Skill),
+}
+
+type ByRarityDesc []*Cosmetic
+
+func (r ByRarityDesc) Len() int           { return len(r) }
+func (r ByRarityDesc) Swap(i, j int)      { r[i], r[j] = r[j], r[i] }
+func (r ByRarityDesc) Less(i, j int) bool { return r[i].Rarity > r[j].Rarity }
+
+func GetBackgrounds() []*Cosmetic {
+	var backgrounds = make([]*Cosmetic, 0, len(Cosmetics))
+	if len(Cosmetics) > 0 {
+		for _, cosmetic := range Cosmetics {
+			if cosmetic.Type == Background && cosmetic.Name != "BugError404NotE E E BOOM" {
+				backgrounds = append(backgrounds, cosmetic)
+			}
+		}
+		sort.Sort(ByRarityDesc(backgrounds))
+		return backgrounds
+	}
+	return backgrounds
 }
 
 func CalcLevel(xp int) int {

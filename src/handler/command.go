@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/xYurii/Bell/src/prototypes"
 )
 
 type Command struct {
@@ -22,15 +21,16 @@ var Commands = map[string]Command{}
 
 func RegisterCommand(cmd Command) {
 	Commands[cmd.Name] = cmd
+	if len(cmd.Aliases) > 0 {
+		for _, alias := range cmd.Aliases {
+			if alias != cmd.Name {
+				Commands[alias] = cmd
+			}
+		}
+	}
 }
 
 func GetCommand(name string) (Command, bool) {
-	for _, cmd := range Commands {
-		if cmd.Name == name || prototypes.Includes(cmd.Aliases, func(alias string) bool {
-			return alias == name
-		}) {
-			return cmd, true
-		}
-	}
-	return Command{}, false
+	cmd, exists := Commands[name]
+	return cmd, exists
 }
