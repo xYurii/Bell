@@ -11,10 +11,12 @@ import (
 
 func init() {
 	handler.RegisterCommand(handler.Command{
-		Name:     "xp",
-		Aliases:  []string{"xp-hierarchy", "xphierarchy", "level", "lvl"},
-		Cooldown: 5,
-		Run:      runXp,
+		Name:        "xp",
+		Aliases:     []string{"xp-hierarchy", "xphierarchy", "level", "lvl"},
+		Cooldown:    5,
+		Run:         runXp,
+		Category:    "asura",
+		Description: "asura.xphierarchy",
 	})
 }
 

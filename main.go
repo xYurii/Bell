@@ -13,7 +13,9 @@ import (
 	_ "github.com/xYurii/Bell/src/commands"
 	_ "github.com/xYurii/Bell/src/components"
 	"github.com/xYurii/Bell/src/database"
+	"github.com/xYurii/Bell/src/database/schemas"
 	"github.com/xYurii/Bell/src/events"
+	"github.com/xYurii/Bell/src/services"
 	"github.com/xYurii/Bell/src/utils"
 )
 
@@ -21,6 +23,8 @@ func main() {
 	if err := godotenv.Load(); err != nil {
 		log.Fatalf("Error loading .env file")
 	}
+
+	fmt.Println(services.Translate("help.description", &schemas.User{Language: "en-US"}))
 
 	// load the asura roosters effects and cosmetics:
 	utils.GetCosmetics()

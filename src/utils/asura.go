@@ -6,8 +6,9 @@ import (
 	"io"
 	"math"
 	"net/http"
-	"sort"
 	"sync"
+
+	"github.com/xYurii/Bell/src/prototypes"
 )
 
 type Rarity int
@@ -103,12 +104,6 @@ var skillsCache = struct {
 	data: make(map[string][]*Skill),
 }
 
-type ByRarityDesc []*Cosmetic
-
-func (r ByRarityDesc) Len() int           { return len(r) }
-func (r ByRarityDesc) Swap(i, j int)      { r[i], r[j] = r[j], r[i] }
-func (r ByRarityDesc) Less(i, j int) bool { return r[i].Rarity > r[j].Rarity }
-
 func GetBackgrounds() []*Cosmetic {
 	var backgrounds = make([]*Cosmetic, 0, len(Cosmetics))
 	if len(Cosmetics) > 0 {
@@ -117,7 +112,10 @@ func GetBackgrounds() []*Cosmetic {
 				backgrounds = append(backgrounds, cosmetic)
 			}
 		}
-		sort.Sort(ByRarityDesc(backgrounds))
+
+		prototypes.SortSlice(backgrounds, func(a, b *Cosmetic) bool {
+			return a.Rarity < b.Rarity
+		}, true)
 		return backgrounds
 	}
 	return backgrounds

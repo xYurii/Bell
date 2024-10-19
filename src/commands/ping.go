@@ -10,10 +10,12 @@ import (
 
 func init() {
 	handler.RegisterCommand(handler.Command{
-		Name:     "ping",
-		Aliases:  []string{"pong"},
-		Cooldown: 5,
-		Run:      runPing,
+		Name:        "ping",
+		Aliases:     []string{"pong"},
+		Cooldown:    5,
+		Run:         runPing,
+		Category:    "general",
+		Description: "ping.description",
 	})
 }
 

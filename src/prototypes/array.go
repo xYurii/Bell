@@ -1,5 +1,7 @@
 package prototypes
 
+import "sort"
+
 func Includes[T any](arr []T, callback func(T) bool) bool {
 	for _, v := range arr {
 		if callback(v) {
@@ -60,4 +62,16 @@ func Splice[T any](arr []T, start int, deleteCount int, items ...T) []T {
 	}
 
 	return append(arr[:start], append(items, arr[start+deleteCount:]...)...)
+}
+
+func SortSlice[T any](slice []T, less func(a, b T) bool, desc bool) {
+	if desc {
+		sort.Slice(slice, func(i, j int) bool {
+			return less(slice[j], slice[i])
+		})
+	} else {
+		sort.Slice(slice, func(i, j int) bool {
+			return less(slice[i], slice[j])
+		})
+	}
 }

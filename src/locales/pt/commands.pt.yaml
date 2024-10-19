@@ -1,0 +1,22 @@
+help:
+  description: "Veja os meus comandos"
+  footer: "Use {{.}}help <comando> para ver mais informações sobre um comando."
+  title: "**Ajuda**"
+  descriptionfield: "Descrição"
+  categoryfield: "Categoria"
+  aliasesfield: "Sinônimos"
+  usagefield: "Modo de uso"
+  cooldownfield: "Cooldown"
+
+aboutcommand:
+  title: "**Sobre o comando: {{.}}**"
+
+asura:
+  rooster: "Mostra informações sobre um galo do Asura."
+  backgrounds: "Mostra as backgrounds do Asura."
+  xphierarchy: "Mostra a hierarquia de XP do Asura até o nível 50."
+
+ping:
+  help: "Mostra o ping do bot."
+
+test: "ok"

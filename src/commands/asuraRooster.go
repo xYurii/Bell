@@ -14,10 +14,12 @@ import (
 
 func init() {
 	handler.RegisterCommand(handler.Command{
-		Name:     "galo",
-		Aliases:  []string{"rooster"},
-		Cooldown: 5,
-		Run:      runAsuraRooster,
+		Name:        "galo",
+		Aliases:     []string{"rooster"},
+		Cooldown:    5,
+		Run:         runAsuraRooster,
+		Category:    "asura",
+		Description: "asura.rooster",
 	})
 }
 

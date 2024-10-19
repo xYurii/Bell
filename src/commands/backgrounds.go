@@ -12,10 +12,12 @@ import (
 
 func init() {
 	handler.RegisterCommand(handler.Command{
-		Name:     "backgrounds",
-		Aliases:  []string{"bgs", "bg"},
-		Cooldown: 5,
-		Run:      runBackgrounds,
+		Name:        "backgrounds",
+		Aliases:     []string{"bgs", "bg"},
+		Cooldown:    5,
+		Run:         runBackgrounds,
+		Category:    "asura",
+		Description: "asura.backgrounds",
 	})
 }
 
