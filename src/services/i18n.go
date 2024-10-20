@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/BurntSushi/toml"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/xYurii/Bell/src/database/schemas"
 	"golang.org/x/text/language"
-	yaml "gopkg.in/yaml.v3"
 )
 
 var Bundle *i18n.Bundle
@@ -33,7 +33,7 @@ func Translate(key string, user *schemas.User, data ...interface{}) string {
 
 func init() {
 	Bundle = i18n.NewBundle(language.Portuguese)
-	Bundle.RegisterUnmarshalFunc("yaml", yaml.Unmarshal)
+	Bundle.RegisterUnmarshalFunc("toml", toml.Unmarshal)
 
 	for _, lang := range Languages {
 		basePath := fmt.Sprintf("src/locales/%s", lang)

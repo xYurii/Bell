@@ -2,13 +2,13 @@ package events
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/xYurii/Bell/src/database"
 	"github.com/xYurii/Bell/src/handler"
+	"github.com/xYurii/Bell/src/services"
 	"github.com/xYurii/Bell/src/utils/discord"
 )
 
@@ -23,7 +23,9 @@ func OnMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	mentions := m.Mentions
 	if len(mentions) == 1 && mentions[0].ID == s.State.User.ID {
-		_, err := discord.NewMessage(s, m.ChannelID, m.ID).WithContent(fmt.Sprintf("Olá %s! Meu prefixo é **%s**\nPara ver meus comandos, digite **%shelp**!", m.Author.Mention(), prefix, prefix)).Send()
+		userData := database.User.GetUser(ctx, m.Author)
+		res := services.Translate("Bot.Mention", &userData, prefix)
+		_, err := discord.NewMessage(s, m.ChannelID, m.ID).WithContent(res).Send()
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -46,7 +48,6 @@ func OnMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if !exists {
 		return
 	}
-	fmt.Printf("%s used %s command\n", m.Author.Username, commandName)
 
 	command.Run(ctx, s, m, args[1:])
 }

@@ -19,7 +19,7 @@ func init() {
 		Cooldown:    5,
 		Run:         runAsuraRooster,
 		Category:    "asura",
-		Description: "asura.rooster",
+		Description: "Asura.Rooster",
 	})
 }
 

@@ -16,7 +16,7 @@ func init() {
 		Cooldown:    5,
 		Run:         runXp,
 		Category:    "asura",
-		Description: "asura.xphierarchy",
+		Description: "Asura.Xphierarchy",
 	})
 }
 

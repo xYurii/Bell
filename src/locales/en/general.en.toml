@@ -1,0 +1,2 @@
+[Bot]
+Mention="Hi! My prefix is **{{.}}**\nTo see my commands, type **{{.}}help**!"

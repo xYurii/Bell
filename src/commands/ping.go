@@ -15,7 +15,7 @@ func init() {
 		Cooldown:    5,
 		Run:         runPing,
 		Category:    "general",
-		Description: "ping.description",
+		Description: "Ping.Description",
 	})
 }
 

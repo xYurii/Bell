@@ -1,0 +1,30 @@
+[Help]
+Description = "Veja Os Meus Comandos"
+Footer = "Use {{.}}Help <comando> Para Ver Mais Informações Sobre Um Comando."
+Title = "**Ajuda**"
+Descriptionfield = "Descrição"
+Categoryfield = "Categoria"
+Aliasesfield = "Sinônimos"
+Usagefield = "Modo De Uso"
+Cooldownfield = "Tempo de Espera"
+Cooldownvalue = "{{.}} segundos"
+
+[Aboutcommand]
+Title = "**Sobre O Comando: {{.}}**"
+
+[Asura]
+Rooster = "Mostra Informações Sobre Um Galo Do Asura."
+Backgrounds = "Mostra As Backgrounds Do Asura."
+Xphierarchy = "Mostra A Hierarquia De XP Do Asura Até O Nível 50."
+
+[Ping]
+Help = "Mostra O Ping Do Bot."
+
+[Language]
+Help = "Mude o idioma do bot."
+Title = "**Idioma Atual**"
+Embeddescription = "Você está falando em **{{.}}** agora. Para alterar, selecione uma opção abaixo."
+Portuguese = "Português"
+English = "Inglês"
+Menuplaceholder = "Selecione um idioma"
+Success = "Você mudou o idioma para **{{.}}**!"

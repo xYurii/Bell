@@ -30,7 +30,7 @@ func init() {
 func runHelp(ctx context.Context, s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 	commands := map[string]map[string]bool{}
 
-	user := database.User.GetUser(ctx, m.Author.ID)
+	user := database.User.GetUser(ctx, m.Author)
 	guild := database.Guild.GetGuild(ctx, m.GuildID)
 
 	if len(args) > 0 {
@@ -50,10 +50,10 @@ func runHelp(ctx context.Context, s *discordgo.Session, m *discordgo.MessageCrea
 	}
 
 	embed := &discordgo.MessageEmbed{
-		Title: services.Translate("help.title", &user),
+		Title: services.Translate("Help.Title", &user),
 		Color: utils.ColorDefault,
 		Footer: &discordgo.MessageEmbedFooter{
-			Text:    services.Translate("help.footer", &user, guild.Prefix),
+			Text:    services.Translate("Help.Footer", &user, guild.Prefix),
 			IconURL: m.Author.AvatarURL("2048"),
 		},
 	}
@@ -80,7 +80,7 @@ func runHelp(ctx context.Context, s *discordgo.Session, m *discordgo.MessageCrea
 
 func showAboutCommand(s *discordgo.Session, m *discordgo.MessageCreate, command handler.Command, user *schemas.User) {
 	embed := &discordgo.MessageEmbed{
-		Title: services.Translate("aboutcommand.title", user, command.Name),
+		Title: services.Translate("Aboutcommand.Title", user, command.Name),
 		Color: utils.ColorDefault,
 		Footer: &discordgo.MessageEmbedFooter{
 			Text:    s.State.User.Username,
@@ -90,7 +90,7 @@ func showAboutCommand(s *discordgo.Session, m *discordgo.MessageCreate, command 
 
 	if command.Category != "" {
 		embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
-			Name:   services.Translate("help.categoryfield", user),
+			Name:   services.Translate("Help.Categoryfield", user),
 			Value:  cases.Title(language.Portuguese).String(command.Category),
 			Inline: false,
 		})
@@ -99,7 +99,7 @@ func showAboutCommand(s *discordgo.Session, m *discordgo.MessageCreate, command 
 	if len(command.Aliases) > 0 {
 		aliases := strings.Join(command.Aliases, ", ")
 		embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
-			Name:   services.Translate("help.aliasesfield", user),
+			Name:   services.Translate("Help.Aliasesfield", user),
 			Value:  aliases,
 			Inline: false,
 		})
@@ -107,14 +107,14 @@ func showAboutCommand(s *discordgo.Session, m *discordgo.MessageCreate, command 
 
 	if command.Description != "" {
 		embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
-			Name:   services.Translate("help.descriptionfield", user),
+			Name:   services.Translate("Help.Descriptionfield", user),
 			Value:  services.Translate(command.Description, user),
 			Inline: false,
 		})
 	}
 	if command.Usage != "" {
 		embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
-			Name:   services.Translate("help.usagefield", user),
+			Name:   services.Translate("Help.Usagefield", user),
 			Value:  services.Translate(command.Usage, user),
 			Inline: false,
 		})
@@ -122,8 +122,8 @@ func showAboutCommand(s *discordgo.Session, m *discordgo.MessageCreate, command 
 
 	if command.Cooldown > 0 {
 		embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
-			Name:   services.Translate("help.cooldownfield", user),
-			Value:  fmt.Sprintf("%d segundos", command.Cooldown),
+			Name:   services.Translate("Help.Cooldownfield", user),
+			Value:  services.Translate("Help.Cooldownvalue", user, command.Cooldown),
 			Inline: false,
 		})
 	}

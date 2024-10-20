@@ -17,7 +17,7 @@ func init() {
 		Cooldown:    5,
 		Run:         runBackgrounds,
 		Category:    "asura",
-		Description: "asura.backgrounds",
+		Description: "Asura.Backgrounds",
 	})
 }
 
