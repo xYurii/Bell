@@ -23,7 +23,7 @@ func init() {
 		Cooldown:    5,
 		Run:         runHelp,
 		Category:    "general",
-		Description: "help.description",
+		Description: "Help.Description",
 	})
 }
 
@@ -42,11 +42,13 @@ func runHelp(ctx context.Context, s *discordgo.Session, m *discordgo.MessageCrea
 	}
 
 	for _, command := range handler.Commands {
-		if _, ok := commands[command.Category]; !ok {
-			commands[command.Category] = map[string]bool{}
-		}
+		if !command.Developer {
+			if _, ok := commands[command.Category]; !ok {
+				commands[command.Category] = map[string]bool{}
+			}
 
-		commands[command.Category][command.Name] = true
+			commands[command.Category][command.Name] = true
+		}
 	}
 
 	embed := &discordgo.MessageEmbed{

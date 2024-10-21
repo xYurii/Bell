@@ -121,7 +121,7 @@ func runAsuraRooster(_ context.Context, s *discordgo.Session, m *discordgo.Messa
 	roosterImg := roostersSprites[0][roosterIndex-1]
 
 	embed := &discordgo.MessageEmbed{
-		Title: fmt.Sprintf("Galo **%s**", rooster.Name),
+		Title: fmt.Sprintf("Galo **%s** - **%s**", rooster.Name, rooster.Rarity.String()),
 		Color: rooster.Rarity.Color(),
 		Image: &discordgo.MessageEmbedImage{
 			URL: roosterImg,
@@ -167,7 +167,12 @@ func ShowRoosterSkills(s *discordgo.Session, i *discordgo.Interaction, rooster *
 		if skill.Effect[0] != 0 || skill.Effect[1] != 0 {
 			effect := utils.Effects[int(skill.Effect[1])]
 			minEffect, maxEffect := utils.CalcDamage(effect.Range[0], effect.Range[1], resets)
-			text += fmt.Sprintf("\n*Tem %d%% de Chance de causar %s* **%d** - **%d**", int(skill.Effect[0]*100), effect.Name, minEffect, maxEffect)
+			turns := effect.Turns
+			turnsText := ""
+			if turns > 0 {
+				turnsText = fmt.Sprintf(" (%d turnos)", turns)
+			}
+			text += fmt.Sprintf("\nTem %d%% de Chance de causar **%s** [**%d** - **%d**]%s", int(skill.Effect[0]*100), effect.Name, minEffect, maxEffect, turnsText)
 		}
 
 		return text
@@ -187,7 +192,7 @@ func ShowRoosterSkins(s *discordgo.Session, i *discordgo.Interaction, rooster *u
 	for _, c := range utils.Cosmetics {
 		if c.Extra == roosterIndex {
 			embed := &discordgo.MessageEmbed{
-				Title: c.Name,
+				Title: fmt.Sprintf("**%s** - **%s**", c.Name, c.Rarity.String()),
 				Color: c.Rarity.Color(),
 				Image: &discordgo.MessageEmbedImage{
 					URL: c.Value,

@@ -28,7 +28,7 @@ func runBackgrounds(ctx context.Context, s *discordgo.Session, m *discordgo.Mess
 
 	response := &discordgo.MessageSend{
 		Embed:      BuildEmbed(background, page, len(backgrounds)),
-		Components: CreateButtons(page),
+		Components: CreateButtons(page, m.Author.ID),
 		Reference: &discordgo.MessageReference{
 			MessageID: m.ID,
 		},
@@ -53,18 +53,18 @@ func BuildEmbed(background *utils.Cosmetic, page, backgroundsLen int) *discordgo
 	}
 }
 
-func CreateButtons(page int) []discordgo.MessageComponent {
+func CreateButtons(page int, userID string) []discordgo.MessageComponent {
 	return []discordgo.MessageComponent{
 		discordgo.ActionsRow{
 			Components: []discordgo.MessageComponent{
 				discordgo.Button{
 					Style:    discordgo.PrimaryButton,
-					CustomID: "backgrounds_previous_" + strconv.Itoa(page),
+					CustomID: "backgrounds_previous_" + strconv.Itoa(page) + "_" + userID,
 					Emoji:    &discordgo.ComponentEmoji{Name: "DoubleLeftArrow", ID: "1272032089507762242"},
 				},
 				discordgo.Button{
 					Style:    discordgo.PrimaryButton,
-					CustomID: "backgrounds_next_" + strconv.Itoa(page),
+					CustomID: "backgrounds_next_" + strconv.Itoa(page) + "_" + userID,
 					Emoji:    &discordgo.ComponentEmoji{Name: "DoubleRightArrow", ID: "1272031913888059468"},
 				},
 			},

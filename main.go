@@ -14,6 +14,7 @@ import (
 	_ "github.com/xYurii/Bell/src/components"
 	"github.com/xYurii/Bell/src/database"
 	"github.com/xYurii/Bell/src/events"
+	"github.com/xYurii/Bell/src/handler"
 	"github.com/xYurii/Bell/src/utils"
 )
 
@@ -38,6 +39,8 @@ func main() {
 	s.AddHandler(events.OnReady)
 	s.AddHandler(events.OnMessageCreate)
 	s.AddHandler(events.OnInteractionCreate)
+
+	handler.Client = s
 
 	if err := s.Start(); err != nil {
 		log.Fatalf("Error starting shards: %v", err)

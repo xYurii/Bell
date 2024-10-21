@@ -2,16 +2,19 @@ package commands
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
-	"reflect"
 
+	"github.com/acnologla/interpreter"
 	"github.com/bwmarrin/discordgo"
-	"github.com/traefik/yaegi/interp"
-	"github.com/traefik/yaegi/stdlib"
 	"github.com/xYurii/Bell/src/handler"
 )
 
 func init() {
+	interpreter.Init(map[string]interface{}{
+		"commands": handler.Commands,
+	})
+
 	handler.RegisterCommand(handler.Command{
 		Name:        "eval",
 		Aliases:     []string{"ev"},
@@ -29,26 +32,16 @@ func runEval(_ context.Context, s *discordgo.Session, m *discordgo.MessageCreate
 		code += arg + " "
 	}
 
-	i := interp.New(interp.Options{})
-	i.Use(stdlib.Symbols)
-
-	exports := interp.Exports{
-		"env": map[string]reflect.Value{
-			"Author":  reflect.ValueOf(m.Author),
-			"Content": reflect.ValueOf(m.Content),
-			"Channel": reflect.ValueOf(m.ChannelID),
-			"Session": reflect.ValueOf(s),
-			"Message": reflect.ValueOf(m),
-		},
-	}
-	i.Use(exports)
-
-	result, err := i.Eval(code)
+	msg_json, err := json.MarshalIndent(m, "", "  ")
 	if err != nil {
-		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Erro ao avaliar código: %s", err.Error()))
+		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Error serializing message: %v", err))
 		return
 	}
 
-	response := fmt.Sprintf("```rust\n%v\n```", result)
+	eval := interpreter.Run(code, map[string]interface{}{
+		"msg": string(msg_json),
+		"s":   s,
+	})
+	response := fmt.Sprintf("```rust\n%v\n```", eval)
 	s.ChannelMessageSend(m.ChannelID, response)
 }

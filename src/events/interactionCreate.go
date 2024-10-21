@@ -2,18 +2,17 @@ package events
 
 import (
 	"context"
+	"sync"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/xYurii/Bell/src/handler"
 )
 
+var mutex sync.RWMutex
+
 func handleLocalComponent(s *discordgo.Session, i *discordgo.InteractionCreate, ctx context.Context) {
 	if collector, exists := handler.GetMessageComponentCollector(i.Message); exists {
-		go func() {
-			mutex.Lock()
-			defer mutex.Unlock()
-			collector.Callback(i.Interaction)
-		}()
+		collector.Callback(i.Interaction)
 	} else {
 		handleGlobalComponent(s, i, ctx)
 	}
@@ -32,6 +31,6 @@ func handleGlobalComponent(s *discordgo.Session, i *discordgo.InteractionCreate,
 func OnInteractionCreate(s *discordgo.Session, i *discordgo.InteractionCreate) {
 	ctx := context.Background()
 	if i.Type == discordgo.InteractionMessageComponent {
-		handleLocalComponent(s, i, ctx)
+		go handleLocalComponent(s, i, ctx)
 	}
 }

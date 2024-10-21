@@ -29,10 +29,16 @@ func cosmectics(_ context.Context, s *discordgo.Session, i *discordgo.Interactio
 	backgrounds := utils.GetBackgrounds()
 	customIdSplitted := handler.ParseComponentId(i.MessageComponentData().CustomID)
 	action := customIdSplitted[1]
+	userID := customIdSplitted[3]
 	newPage, err := strconv.Atoi(customIdSplitted[2])
 
 	if err != nil {
 		log.Fatal(err)
+		return
+	}
+
+	if userID != i.Member.User.ID {
+		return
 	}
 
 	switch action {
@@ -50,7 +56,7 @@ func cosmectics(_ context.Context, s *discordgo.Session, i *discordgo.Interactio
 
 	background := backgrounds[newPage]
 	newEmbed := commands.BuildEmbed(background, newPage, len(backgrounds))
-	newButtons := commands.CreateButtons(newPage)
+	newButtons := commands.CreateButtons(newPage, userID)
 
 	msgEdit := &discordgo.MessageEdit{
 		Embeds:     &[]*discordgo.MessageEmbed{newEmbed},

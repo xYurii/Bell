@@ -15,6 +15,7 @@ require (
 )
 
 require (
+	github.com/acnologla/interpreter v0.0.0-20210104214054-12f2ca1c2202 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20200428143746-21a406dcc535 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/gorilla/context v1.1.1 // indirect
