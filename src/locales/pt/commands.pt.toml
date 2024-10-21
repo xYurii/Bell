@@ -28,3 +28,13 @@ Portuguese = "Português"
 English = "Inglês"
 Menuplaceholder = "Selecione um idioma"
 Success = "Você mudou o idioma para **{{.}}**!"
+YouCantDoThat = "Você não pode clicar aqui, isto não é para você!"
+
+[Prefix]
+Help = "Mude o Prefixo do Bot."
+Usage = "prefixo <novo_prefixo>"
+NoPermission = "{{.}}, você não tem permissão de gerenciar servidor para mudar o prefixo."
+NoArgs = "{{.}}, você não digitou um novo prefixo."
+TooLong = "{{.}}, o prefixo é maior que 5 caracteres."
+Invalid = "{{.}}, o prefixo é inválido, você pode usar apenas letras e números."
+Success = "{{.User}}, o prefixo do bot foi alterado para **{{.Prefix}}** com sucesso!"

@@ -33,7 +33,7 @@ func main() {
 
 	conn := fmt.Sprintf("Bot %s", os.Getenv("DISCORD_CLIENT_TOKEN"))
 	s, _ := shards.New(conn)
-	s.Intent = discordgo.IntentsGuildMessages
+	s.Intent = discordgo.IntentsAll
 
 	s.AddHandler(events.OnReady)
 	s.AddHandler(events.OnMessageCreate)

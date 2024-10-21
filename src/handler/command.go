@@ -6,6 +6,8 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
+var OwnersIDs = []string{"339314508621283329", "1030277251377410068"}
+
 type Command struct {
 	Name        string
 	Description string

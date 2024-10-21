@@ -8,6 +8,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/xYurii/Bell/src/database"
 	"github.com/xYurii/Bell/src/handler"
+	"github.com/xYurii/Bell/src/prototypes"
 	"github.com/xYurii/Bell/src/services"
 	"github.com/xYurii/Bell/src/utils/discord"
 )
@@ -46,6 +47,12 @@ func OnMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	command, exists := handler.GetCommand(commandName)
 
 	if !exists {
+		return
+	}
+
+	if command.Developer && !prototypes.Includes(handler.OwnersIDs, func(id string) bool {
+		return m.Author.ID == id
+	}) {
 		return
 	}
 

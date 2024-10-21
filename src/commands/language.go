@@ -35,6 +35,12 @@ func runLanguage(ctx context.Context, s *discordgo.Session, m *discordgo.Message
 
 	handler.CreateMessageComponentCollector(msg, func(i *discordgo.Interaction) {
 		l := i.MessageComponentData().Values[0]
+
+		if i.User.ID != m.Author.ID {
+			handler.RespondInteraction(s, i, discordgo.InteractionResponseChannelMessageWithSource, services.Translate("Language.YouCantDoThat", &user), discordgo.MessageFlagsEphemeral)
+			return
+		}
+
 		database.User.UpdateUser(ctx, m.Author, func(u schemas.User) schemas.User {
 			u.Language = l
 			res := services.Translate("Language.Success", &schemas.User{Language: l}, l)

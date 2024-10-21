@@ -28,3 +28,13 @@ Portuguese = "Portuguese"
 English = "English"
 Menuplaceholder = "Select a language"
 Success = "You changed the language to **{{.}}**!"
+YouCantDoThat = "You can't click here, this is not for you!"
+
+[Prefix]
+Help = "Change the bot prefix."
+Usage = "prefix <new_prefix>"
+NoPermission = "{{.}}, you don't have permission to manage server to change the prefix."
+NoArgs = "{{.}}, you didn't type a new prefix."
+TooLong = "{{.}}, the prefix is longer than 5 characters."
+Invalid = "{{.}}, the prefix is invalid, you can only use letters and numbers."
+Success = "{{.User}}, the bot prefix was changed to **{{.Prefix}}** successfully!"
