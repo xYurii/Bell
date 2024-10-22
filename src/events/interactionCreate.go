@@ -8,29 +8,62 @@ import (
 	"github.com/xYurii/Bell/src/handler"
 )
 
-var mutex sync.RWMutex
+const Workers = 128
 
-func handleLocalComponent(s *discordgo.Session, i *discordgo.InteractionCreate, ctx context.Context) {
-	if collector, exists := handler.GetMessageComponentCollector(i.Message); exists {
+var WorkersArray = make([]bool, Workers)
+var InteractionCreateChannel = make(chan *discordgo.InteractionCreate)
+
+var ComponentLock = sync.RWMutex{}
+
+func HandleComponent(ctx context.Context, s *discordgo.Session, i *discordgo.InteractionCreate) {
+	ComponentLock.RLock()
+	defer ComponentLock.RUnlock()
+
+	collector, existsCollector := handler.GetMessageComponentCollector(i.Message)
+	if existsCollector {
+		collector.Lock()
+		defer collector.Unlock()
 		collector.Callback(i.Interaction)
-	} else {
-		handleGlobalComponent(s, i, ctx)
+		return
 	}
-}
 
-func handleGlobalComponent(s *discordgo.Session, i *discordgo.InteractionCreate, ctx context.Context) {
 	globalComponent, existsGlobal := handler.GetComponent(i.MessageComponentData().CustomID)
 	if existsGlobal {
 		globalComponent.Run(ctx, s, i)
-	} else {
-		res := "O cache desta interação expirou! Use o respectivo comando novamente."
-		handler.RespondInteraction(s, i.Interaction, discordgo.InteractionResponseChannelMessageWithSource, res, discordgo.MessageFlagsEphemeral)
+		return
 	}
+
+	res := "O cache desta interação expirou! Use o respectivo comando novamente."
+	handler.RespondInteraction(s, i.Interaction, discordgo.InteractionResponseChannelMessageWithSource, res, discordgo.MessageFlagsEphemeral)
 }
 
 func OnInteractionCreate(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	ctx := context.Background()
 	if i.Type == discordgo.InteractionMessageComponent {
-		go handleLocalComponent(s, i, ctx)
+		InteractionCreateChannel <- i
 	}
+}
+
+func Worker(id int, s *discordgo.Session) {
+	for itc := range InteractionCreateChannel {
+		WorkersArray[id] = true
+		ctx := context.Background()
+		HandleComponent(ctx, s, itc)
+		WorkersArray[id] = false
+	}
+}
+
+func InitInteractionWorkers(s *discordgo.Session) {
+	for i := 0; i < Workers; i++ {
+		go Worker(i, s)
+	}
+}
+
+func GetFreeWorkers() int {
+	var freeWorkers int
+	for _, worker := range WorkersArray {
+		if !worker {
+			freeWorkers++
+		}
+	}
+	return freeWorkers
 }

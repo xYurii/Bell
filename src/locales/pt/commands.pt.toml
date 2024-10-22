@@ -38,3 +38,41 @@ NoArgs = "{{.}}, você não digitou um novo prefixo."
 TooLong = "{{.}}, o prefixo é maior que 5 caracteres."
 Invalid = "{{.}}, o prefixo é inválido, você pode usar apenas letras e números."
 Success = "{{.User}}, o prefixo do bot foi alterado para **{{.Prefix}}** com sucesso!"
+
+[BotInfo]
+Help = "Mostra informações sobre o bot."
+GuildUsageMB = "Memória RAM usada nesse servidor: **{{.GuildUsage}}** MB"
+GuildUsageKB = "Memória RAM usada nesse servidor: **{{.GuildUsage}}** KB"
+Title = "**Informações do Bot** 🤖"
+
+[BotInfo.Fields.Servers]
+Name = "🌐 Servidores"
+Value = "**{{.GuildsCount}}**"
+
+[BotInfo.Fields.Ping]
+Name = "📶 Ping"
+Value = "**{{.Ping}}** ms"
+
+[BotInfo.Fields.RamUsage]
+Name = "💻 Uso de RAM"
+Value = "**{{.RamUsage}}** MB\n{{.GuildUsage}}"
+
+[BotInfo.Fields.CreatedAt]
+Name = "🗓️ Criado em"
+Value = "{{.CreationDate}}"
+
+[BotInfo.Fields.ReadyAt]
+Name = "⏳ Tempo online"
+Value = "{{.ReadyAt}}"
+
+[BotInfo.Fields.Shard]
+Name = "🔗 Shard"
+Value = "**{{.Shard}}**/**{{.Shards}}**"
+
+[BotInfo.Fields.Workers]
+Name = "👷 Processos Livres"
+Value = "**{{.FreeWorkers}}**/**{{.TotalWorkers}}**"
+
+[BotInfo.Fields.Owner]
+Name = "👑 Dono"
+Value = "**{{.Owner}}** ({{.ID}})"

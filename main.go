@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/joho/godotenv"
@@ -40,11 +41,12 @@ func main() {
 	s.AddHandler(events.OnMessageCreate)
 	s.AddHandler(events.OnInteractionCreate)
 
-	handler.Client = s
-
 	if err := s.Start(); err != nil {
 		log.Fatalf("Error starting shards: %v", err)
 	}
+
+	events.InitInteractionWorkers(s.Gateway)
+	handler.ReadyAt = time.Now()
 
 	sigch := make(chan os.Signal, 1)
 	signal.Notify(sigch, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)

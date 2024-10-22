@@ -38,3 +38,41 @@ NoArgs = "{{.}}, you didn't type a new prefix."
 TooLong = "{{.}}, the prefix is longer than 5 characters."
 Invalid = "{{.}}, the prefix is invalid, you can only use letters and numbers."
 Success = "{{.User}}, the bot prefix was changed to **{{.Prefix}}** successfully!"
+
+[BotInfo]
+Help = "Displays information about the bot."
+GuildUsageMB = "RAM used in this server: **{{.GuildUsage}}** MB"
+GuildUsageKB = "RAM used in this server: **{{.GuildUsage}}** KB"
+Title = "**Bot Information** 🤖"
+
+[BotInfo.Fields.Servers]
+Name = "🌐 Servers"
+Value = "**{{.GuildsCount}}**"
+
+[BotInfo.Fields.Ping]
+Name = "📶 Ping"
+Value = "**{{.Ping}}** ms"
+
+[BotInfo.Fields.RamUsage]
+Name = "💻 RAM Usage"
+Value = "**{{.RamUsage}}** MB\n{{.GuildUsage}}"
+
+[BotInfo.Fields.CreatedAt]
+Name = "🗓️ Created At"
+Value = "**{{.CreationDate}}**"
+
+[BotInfo.Fields.ReadyAt]
+Name = "⏳ Uptime"
+Value = "**{{.ReadyAt}}**"
+
+[BotInfo.Fields.Shard]
+Name = "🔗 Shard"
+Value = "**{{.Shard}}**/**{{.Shards}}**"
+
+[BotInfo.Fields.Workers]
+Name = "👷 Free Processes"
+Value = "**{{.FreeWorkers}}**/**{{.TotalWorkers}}**"
+
+[BotInfo.Fields.Owner]
+Name = "👑 Owner"
+Value = "**{{.Owner}}** ({{.ID}})"

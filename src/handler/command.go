@@ -2,13 +2,10 @@ package handler
 
 import (
 	"context"
+	"time"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/servusdei2018/shards/v2"
 )
-
-var OwnersIDs = []string{"339314508621283329", "1030277251377410068"}
-var Client *shards.Manager
 
 type Command struct {
 	Name        string
@@ -22,6 +19,7 @@ type Command struct {
 }
 
 var Commands = map[string]Command{}
+var ReadyAt time.Time
 
 func RegisterCommand(cmd Command) {
 	Commands[cmd.Name] = cmd

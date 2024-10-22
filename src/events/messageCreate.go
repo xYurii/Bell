@@ -50,7 +50,7 @@ func OnMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	if command.Developer && !prototypes.Includes(handler.OwnersIDs, func(id string) bool {
+	if command.Developer && !prototypes.Includes(OwnersIDs, func(id string) bool {
 		return m.Author.ID == id
 	}) {
 		return
