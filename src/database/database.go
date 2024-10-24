@@ -23,6 +23,7 @@ type DatabaseConfig struct {
 var Database *bun.DB
 var User adapter.UserAdapter
 var Guild adapter.GuildAdapter
+var Raffle adapter.RaffleAdapter
 
 func GetEnvDatabaseConfig() *DatabaseConfig {
 	return &DatabaseConfig{
@@ -54,10 +55,9 @@ func InitDatabase(config *DatabaseConfig) (*bun.DB, error) {
 	Database.SetMaxOpenConns(maxOpenConns)
 	Database.SetMaxIdleConns(maxOpenConns)
 
-	fmt.Println("Database ready!")
-
 	User = adapter.NewUserAdapter(Database)
 	Guild = adapter.NewGuildAdapter(Database)
+	Raffle = adapter.NewRaffleAdapter(Database)
 
 	return Database, nil
 }

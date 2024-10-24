@@ -24,14 +24,11 @@ func main() {
 		log.Fatalf("Error loading .env file")
 	}
 
-	// fmt.Println(services.Translate("Help.Title", &schemas.User{Language: "pt-BR"}))
-
-	// load the asura roosters effects and cosmetics:
-	utils.GetCosmetics()
-	utils.GetEffects()
-
 	// connect to the database
-	database.InitDatabase(database.GetEnvDatabaseConfig())
+	_, err := database.InitDatabase(database.GetEnvDatabaseConfig())
+	if err != nil {
+		log.Fatalf("Error connecting to the database: %s", err)
+	}
 
 	conn := fmt.Sprintf("Bot %s", os.Getenv("DISCORD_CLIENT_TOKEN"))
 	s, _ := shards.New(conn)
@@ -46,6 +43,9 @@ func main() {
 	}
 
 	handler.ReadyAt = time.Now()
+	// load the asura roosters effects and cosmetics:
+	utils.GetCosmetics()
+	utils.GetEffects()
 
 	sigch := make(chan os.Signal, 1)
 	signal.Notify(sigch, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
