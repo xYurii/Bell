@@ -15,7 +15,6 @@ Title = "**About Command: {{.}}**"
 [Asura]
 Rooster = "Show Information About An Asura Rooster."
 Backgrounds = "Show Asura Backgrounds."
-Xphierarchy = "Show Asura XP Hierarchy Until Level 50."
 
 [Ping]
 Help = "Show Bot Ping."
@@ -71,7 +70,7 @@ Value = "**{{.Shard}}**/**{{.Shards}}**"
 
 [BotInfo.Fields.Workers]
 Name = "👷 Free Processes"
-Value = "**{{.FreeWorkers}}**/**{{.TotalWorkers}}**"
+Value = "Interactions: **{{.FreeInteractionsWorkers}}**/**{{.TotalInteractionsWorkers}}**\nMessages: **{{.FreeMessagesWorkers}}**/**{{.TotalMessagesWorkers}}**"
 
 [BotInfo.Fields.Owner]
 Name = "👑 Owner"

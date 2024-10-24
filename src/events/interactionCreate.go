@@ -11,7 +11,7 @@ import (
 const Workers = 128
 
 var WorkersArray = make([]bool, Workers)
-var InteractionCreateChannel = make(chan *discordgo.InteractionCreate)
+var InteractionCreateChannel = make(chan *discordgo.InteractionCreate, Workers)
 
 var ComponentLock = sync.RWMutex{}
 

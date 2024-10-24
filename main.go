@@ -45,7 +45,6 @@ func main() {
 		log.Fatalf("Error starting shards: %v", err)
 	}
 
-	events.InitInteractionWorkers(s.Gateway)
 	handler.ReadyAt = time.Now()
 
 	sigch := make(chan os.Signal, 1)

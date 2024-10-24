@@ -44,7 +44,7 @@ func runBotInfo(ctx context.Context, s *discordgo.Session, m *discordgo.MessageC
 
 	var memory runtime.MemStats
 	runtime.ReadMemStats(&memory)
-	ramUsage := float64(memory.Alloc) / (1024 * 1024)
+	ramUsage := float64(memory.Sys) / (1024 * 1024)
 
 	guildUsage := 0
 	if err == nil {
@@ -138,8 +138,10 @@ func runBotInfo(ctx context.Context, s *discordgo.Session, m *discordgo.MessageC
 		WithField(
 			services.Translate("BotInfo.Fields.Workers.Name", &user),
 			services.Translate("BotInfo.Fields.Workers.Value", &user, map[string]interface{}{
-				"FreeWorkers":  events.GetFreeWorkers(),
-				"TotalWorkers": events.Workers,
+				"FreeInteractionsWorkers":  events.GetFreeWorkers(),
+				"TotalInteractionsWorkers": events.Workers,
+				"FreeMessagesWorkers":      events.GetFreeMessageWorkers(),
+				"TotalMessagesWorkers":     events.MessageWorkers,
 			}), false,
 		).
 		WithField(
