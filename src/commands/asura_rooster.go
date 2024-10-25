@@ -136,9 +136,9 @@ func runAsuraRooster(_ context.Context, s *discordgo.Session, m *discordgo.Messa
 	handler.CreateMessageComponentCollector(message, func(i *discordgo.Interaction) {
 		switch i.MessageComponentData().CustomID {
 		case "skins":
-			ShowRoosterSkins(s, i, &rooster, roosterIndex)
+			showRoosterSkins(s, i, roosterIndex)
 		case "skills":
-			skills := ShowRoosterSkills(s, i, &rooster, float64(resets))
+			skills := showRoosterSkills(&rooster, float64(resets))
 
 			embed := &discordgo.MessageEmbed{
 				Title:       fmt.Sprintf("%s - Resets: %d", rooster.Name, resets),
@@ -158,7 +158,7 @@ func runAsuraRooster(_ context.Context, s *discordgo.Session, m *discordgo.Messa
 	}, 0)
 }
 
-func ShowRoosterSkills(s *discordgo.Session, i *discordgo.Interaction, rooster *utils.Class, resets float64) string {
+func showRoosterSkills(rooster *utils.Class, resets float64) string {
 	skills, _ := utils.GetRoosterSkills(rooster)
 	skillsMap := prototypes.Map(skills, func(skill *utils.Skill) string {
 		min, max := utils.CalcDamage(skill.Damage[0], skill.Damage[1], resets)
@@ -186,7 +186,7 @@ func ShowRoosterSkills(s *discordgo.Session, i *discordgo.Interaction, rooster *
 	return text
 }
 
-func ShowRoosterSkins(s *discordgo.Session, i *discordgo.Interaction, rooster *utils.Class, roosterIndex int) {
+func showRoosterSkins(s *discordgo.Session, i *discordgo.Interaction, roosterIndex int) {
 	var embeds []*discordgo.MessageEmbed
 
 	for _, c := range utils.Cosmetics {

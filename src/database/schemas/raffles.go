@@ -14,6 +14,10 @@ const (
 	Lightning
 )
 
+func (rt RaffleType) String() string {
+	return [3]string{"DAILY", "NORMAL", "LIGHTNING"}[rt]
+}
+
 func (rt RaffleType) Price() int {
 	return [3]int{250, 500, 1000}[rt]
 }
@@ -22,6 +26,23 @@ func (rt RaffleType) MaxTickets() int {
 	base := 100000
 	max := base * int(rt+1)
 	return max
+}
+
+func (rt RaffleType) EndTime() time.Time {
+	location, _ := time.LoadLocation("America/Sao_Paulo")
+	now := time.Now().In(location)
+
+	switch rt {
+	case DailyRaffle:
+		nextMidnight := time.Date(now.Year(), now.Month(), now.Day()+1, 0, 0, 0, 0, location)
+		return nextMidnight
+	case NormalRaffle:
+		return now.Add(1 * time.Hour)
+	case Lightning:
+		return now.Add(15 * time.Minute)
+	default:
+		return now
+	}
 }
 
 type Raffle struct {
