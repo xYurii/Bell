@@ -62,6 +62,8 @@ func HandleMessageCreate(ctx context.Context, s *discordgo.Session, m *discordgo
 		return
 	}
 
+	database.Commands.InsertCommand(ctx, commandName, m.Author.ID, m.GuildID, m.ChannelID, m.Content)
+
 	command.Run(ctx, s, m, args[1:])
 }
 

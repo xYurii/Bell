@@ -97,8 +97,8 @@ func (rm *RaffleManager) EndRaffle(ctx context.Context, raffle *schemas.Raffle) 
 	fmt.Println("Winner:", winnerTicket.UserID, "Total tickets:", totalTickets)
 
 	now := time.Now()
-	winnerTicketID := int64(winnerTicket.ID)
-	raffle.WinnerTicketID = &winnerTicketID
+	winnerTicketID := winnerTicket.ID
+	raffle.WinnerTicketID = winnerTicketID
 	raffle.EndedAt = now
 
 	_, err = tx.NewUpdate().
@@ -166,7 +166,6 @@ func (rm *RaffleManager) EnsureRafflesExist(ctx context.Context) error {
 		count, err := tx.NewSelect().
 			Model((*schemas.Raffle)(nil)).
 			Where("raffle_type = ?", raffleType).
-			Where("ended_at IS NULL").
 			Count(ctx)
 		if err != nil {
 			return fmt.Errorf("error checking raffle type %s: %w", raffleType.String(), err)

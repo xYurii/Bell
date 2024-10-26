@@ -5,15 +5,18 @@ CREATE TABLE raffles (
     raffle_type INT NOT NULL,
     started_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     ends_at TIMESTAMPTZ NOT NULL,
-    ended_at TIMESTAMPTZ NULL,
-    winner_ticket_id BIGINT NULL
+    ended_at TIMESTAMPTZ NULL
 );
 
 CREATE TABLE raffle_tickets (
     id SERIAL PRIMARY KEY,
     bought_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    user_id TEXT NOT NULL
+    user_id VARCHAR(50) NOT NULL,
+    raffle_id INT NOT NULL REFERENCES raffles (id) ON DELETE CASCADE
 );
 
-CREATE INDEX raffle_tickets_idx ON raffle_tickets (user_id, bought_at);
-CREATE INDEX raffles_idx ON raffles (id, ended_at, ends_at, started_at, raffle_type);
+CREATE INDEX raffle_tickets_idx ON raffle_tickets (user_id, bought_at, raffle_id);
+CREATE INDEX raffles_idx ON raffles (ended_at, ends_at, started_at, raffle_type);
+
+ALTER TABLE raffles 
+    ADD COLUMN winner_ticket_id INT REFERENCES raffle_tickets (id) ON DELETE SET NULL;
