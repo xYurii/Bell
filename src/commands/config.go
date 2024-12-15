@@ -20,7 +20,7 @@ func init() {
 		Name:     "config",
 		Aliases:  []string{"configurar", "configurações", "configuracao"},
 		Run:      runConfig,
-		Category: "Config",
+		Category: "config",
 	})
 }
 
