@@ -17,9 +17,10 @@ import (
 
 func init() {
 	handler.RegisterCommand(handler.Command{
-		Name:    "config",
-		Aliases: []string{"configurar", "configurações", "configuracao"},
-		Run:     runConfig,
+		Name:     "config",
+		Aliases:  []string{"configurar", "configurações", "configuracao"},
+		Run:      runConfig,
+		Category: "Config",
 	})
 }
 
