@@ -23,7 +23,6 @@ type DatabaseConfig struct {
 var Database *bun.DB
 var User adapter.UserAdapter
 var Guild adapter.GuildAdapter
-var Raffle adapter.RaffleAdapter
 var Commands adapter.CommandsUsedAdapter
 
 func GetEnvDatabaseConfig() *DatabaseConfig {
@@ -58,7 +57,6 @@ func InitDatabase(config *DatabaseConfig) (*bun.DB, error) {
 
 	User = adapter.NewUserAdapter(Database)
 	Guild = adapter.NewGuildAdapter(Database)
-	Raffle = adapter.NewRaffleAdapter(Database)
 	Commands = adapter.NewCommandsUsedAdapter(Database)
 
 	return Database, nil

@@ -5,6 +5,7 @@ import (
 	"log"
 	"strings"
 	"sync/atomic"
+	"time"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/xYurii/Bell/src/database"
@@ -24,12 +25,12 @@ func HandleMessageCreate(ctx context.Context, s *discordgo.Session, m *discordgo
 		return
 	}
 
+	userData := database.User.GetUser(ctx, m.Author)
 	guildData := database.Guild.GetGuild(ctx, m.GuildID)
 	prefix := strings.ToLower(guildData.Prefix)
 
 	mentions := m.Mentions
 	if len(mentions) == 1 && mentions[0].ID == s.State.User.ID {
-		userData := database.User.GetUser(ctx, m.Author)
 		res := services.Translate("Bot.Mention", &userData, prefix)
 		_, err := discord.NewMessage(s, m.ChannelID, m.ID).WithContent(res).Send()
 		if err != nil {
@@ -60,6 +61,32 @@ func HandleMessageCreate(ctx context.Context, s *discordgo.Session, m *discordgo
 		return m.Author.ID == id
 	}) {
 		return
+	}
+
+	if len(guildData.CommandsChannels) > 0 {
+		inAllowedChannel := prototypes.Includes(guildData.CommandsChannels, func(id string) bool {
+			return id == m.ChannelID
+		})
+		if !inAllowedChannel {
+			allowedExistentChannel := services.Translate("Config.NoChannelExistent", &userData, map[string]interface{}{
+				"Prefix": guildData.Prefix,
+			})
+			for _, id := range guildData.CommandsChannels {
+				channel, err := s.State.Channel(id)
+				if err == nil {
+					allowedExistentChannel = channel.Mention()
+					break
+				}
+			}
+
+			res := services.Translate("Config.WarnMessage", &userData, map[string]interface{}{
+				"AllowedChannel": allowedExistentChannel,
+			})
+			warnMsg, _ := discord.NewMessage(s, m.ChannelID, m.ID).WithContent(res).Send()
+			time.Sleep(10 * time.Second)
+			s.ChannelMessageDelete(m.ChannelID, warnMsg.ID)
+			return
+		}
 	}
 
 	database.Commands.InsertCommand(ctx, commandName, m.Author.ID, m.GuildID, m.ChannelID, m.Content)

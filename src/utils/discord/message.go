@@ -107,12 +107,13 @@ func (m *MessageBuilder) WithUserSelect(customID string, placeholder string, min
 
 func (m *MessageBuilder) WithChannelSelect(customID string, placeholder string, minValues int, maxValues int, disabled bool) *MessageBuilder {
 	selectMenu := discordgo.SelectMenu{
-		CustomID:    customID,
-		Placeholder: placeholder,
-		MenuType:    discordgo.ChannelSelectMenu,
-		MinValues:   &minValues,
-		MaxValues:   maxValues,
-		Disabled:    disabled,
+		CustomID:     customID,
+		Placeholder:  placeholder,
+		MenuType:     discordgo.ChannelSelectMenu,
+		MinValues:    &minValues,
+		MaxValues:    maxValues,
+		Disabled:     disabled,
+		ChannelTypes: []discordgo.ChannelType{discordgo.ChannelTypeGuildText},
 	}
 	m.Components = append(m.Components, discordgo.ActionsRow{
 		Components: []discordgo.MessageComponent{selectMenu},

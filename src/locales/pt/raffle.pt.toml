@@ -1,2 +1,0 @@
-[Raffle]
-NoArgs = "{{.User}}, forma incorreta de utilizar o comando!\nExemplo: {{.Prefix}}rifa status [daily | normal | lightning]"

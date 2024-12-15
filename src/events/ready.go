@@ -1,14 +1,10 @@
 package events
 
 import (
-	"context"
 	"log"
 	"sync"
-	"time"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/xYurii/Bell/src/database"
-	"github.com/xYurii/Bell/src/utils/tasks"
 )
 
 var once sync.Once
@@ -25,22 +21,5 @@ func executeOnReadyOnce(s *discordgo.Session) {
 		log.Println("Initializing Interactions and Messages workers")
 		InitInteractionWorkers(s)
 		InitMessageWorkers(s)
-
-		// start raffles tasks
-		rm := tasks.NewRaffleManager(database.Database, s)
-		err := rm.EnsureRafflesExist(context.Background())
-		if err != nil {
-			log.Fatalf("Error ensuring raffles exist: %s", err)
-		}
-
-		go startRaffleExpirationTicker(rm)
 	})
-}
-
-func startRaffleExpirationTicker(rm *tasks.RaffleManager) {
-	ticker := time.NewTicker(5 * time.Second)
-
-	for range ticker.C {
-		rm.EndExpiredRaffles()
-	}
 }

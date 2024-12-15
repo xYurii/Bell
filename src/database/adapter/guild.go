@@ -29,6 +29,8 @@ func (a *GuildAdapter) GetGuild(ctx context.Context, id string, relations ...str
 	if guild.ID == "" {
 		guild.ID = id
 		guild.Prefix = ".."
+		guild.CommandsChannels = []string{}
+		fmt.Println(guild.ID)
 		a.CreateGuild(ctx, guild)
 		guild = a.GetGuild(ctx, id, relations...)
 	}

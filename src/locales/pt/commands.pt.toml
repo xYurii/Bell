@@ -38,6 +38,14 @@ TooLong = "{{.}}, o prefixo é maior que 5 caracteres."
 Invalid = "{{.}}, o prefixo é inválido, você pode usar apenas letras e números."
 Success = "{{.User}}, o prefixo do bot foi alterado para **{{.Prefix}}** com sucesso!"
 
+[Config]
+NoPermission = "{{.}}, você não tem permissão de gerenciar servidor para acessar esse comando."
+Description = "Chats liberados:\n{{.Channels}}"
+NoChannels = "Nenhum."
+EmbedTitle = "Configurações"
+NoChannelExistent = "Use `{{.Prefix}}config` para configurar."
+WarnMessage = "Você só pode executar comandos em: {{.AllowedChannel}}"
+
 [BotInfo]
 Help = "Mostra informações sobre o bot."
 GuildUsageMB = "Memória RAM usada nesse servidor: **{{.GuildUsage}}** MB"
