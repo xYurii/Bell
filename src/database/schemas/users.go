@@ -9,9 +9,10 @@ import (
 type User struct {
 	bun.BaseModel `bun:"table:users,alias:u"`
 
-	ID        string    `bun:"id,pk,notnull,unique"`
-	Money     uint64    `bun:"money,notnull,default:0"`
-	Language  string    `bun:"language,notnull,default:'pt-BR'"`
-	CreatedAt time.Time `bun:",nullzero,notnull,default:current_timestamp"`
-	UpdatedAt time.Time `bun:",nullzero,notnull,default:current_timestamp"`
+	ID         string    `bun:"id,pk,notnull,unique"`
+	Money      uint64    `bun:"money,notnull,default:0"`
+	Language   string    `bun:"language,notnull,default:'pt-BR'"`
+	StatusTime int64     `bun:"status_time,default:0"`
+	CreatedAt  time.Time `bun:",nullzero,notnull,default:current_timestamp"`
+	UpdatedAt  time.Time `bun:",nullzero,notnull,default:current_timestamp"`
 }

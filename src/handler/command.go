@@ -18,6 +18,7 @@ type Command struct {
 	Run         func(context.Context, *discordgo.Session, *discordgo.MessageCreate, []string)
 }
 
+var UserStatusTracking = make(map[string]int64)
 var Commands = map[string]Command{}
 var ReadyAt time.Time
 

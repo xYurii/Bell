@@ -37,6 +37,7 @@ func main() {
 	s.AddHandler(events.OnReady)
 	s.AddHandler(events.OnMessageCreate)
 	s.AddHandler(events.OnInteractionCreate)
+	s.AddHandler(events.OnPresenceUpdate)
 
 	if err := s.Start(); err != nil {
 		log.Fatalf("Error starting shards: %v", err)
