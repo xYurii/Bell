@@ -50,3 +50,12 @@ func (a *UserAdapter) UpdateUser(ctx context.Context, author *discordgo.User, ca
 		return err
 	})
 }
+
+func (a *UserAdapter) SortUsers(ctx context.Context, limit int, columns ...string) (users []*schemas.User) {
+	query := a.Db.NewSelect().Model(&users)
+	for _, column := range columns {
+		query.Order(fmt.Sprintf("%s DESC", column))
+	}
+	query.Limit(limit).Scan(ctx)
+	return
+}
