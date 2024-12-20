@@ -25,7 +25,7 @@ func runGuilds(ctx context.Context, s *discordgo.Session, m *discordgo.MessageCr
 	guilds := s.State.Guilds
 
 	prototypes.SortSlice(guilds, func(a, b *discordgo.Guild) bool {
-		return a.MemberCount > b.MemberCount
+		return a.MemberCount < b.MemberCount
 	}, true)
 
 	var guildsFormatted []string
