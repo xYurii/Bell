@@ -56,7 +56,11 @@ func runTop(ctx context.Context, s *discordgo.Session, m *discordgo.MessageCreat
 
 func generateImage(s *discordgo.Session, users []*schemas.User) (image.Image, error) {
 	dc := gg.NewContext(width, height)
-	dc.SetHexColor(background)
+	radius := 20.0
+	dc.DrawRoundedRectangle(0, 0, width, height, radius)
+	dc.Clip()
+
+	dc.SetRGBA(252/255.0, 224/255.0, 125/255.0, 0.5)
 	dc.Clear()
 
 	if err := dc.LoadFontFace("NexaBold.ttf", fontSize); err != nil {
