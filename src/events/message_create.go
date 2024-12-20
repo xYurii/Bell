@@ -9,6 +9,7 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/xYurii/Bell/src/database"
+	"github.com/xYurii/Bell/src/database/schemas"
 	"github.com/xYurii/Bell/src/handler"
 	"github.com/xYurii/Bell/src/prototypes"
 	"github.com/xYurii/Bell/src/services"
@@ -29,8 +30,7 @@ func HandleMessageCreate(ctx context.Context, s *discordgo.Session, m *discordgo
 	guildData := database.Guild.GetGuild(ctx, m.GuildID)
 	prefix := strings.ToLower(guildData.Prefix)
 
-	mentions := m.Mentions
-	if len(mentions) == 1 && mentions[0].ID == s.State.User.ID {
+	if mentionsClient(s, m) {
 		res := services.Translate("Bot.Mention", &userData, prefix)
 		_, err := discord.NewMessage(s, m.ChannelID, m.ID).WithContent(res).Send()
 		if err != nil {
@@ -39,7 +39,7 @@ func HandleMessageCreate(ctx context.Context, s *discordgo.Session, m *discordgo
 		return
 	}
 
-	if !strings.HasPrefix(strings.ToLower(m.Content), prefix) {
+	if !strings.HasPrefix(strings.ToLower(m.Content), strings.ToLower(prefix)) {
 		return
 	}
 
@@ -50,7 +50,7 @@ func HandleMessageCreate(ctx context.Context, s *discordgo.Session, m *discordgo
 		return
 	}
 
-	commandName := args[0]
+	commandName := strings.ToLower(args[0])
 	command, exists := handler.GetCommand(commandName)
 
 	if !exists {
@@ -68,6 +68,7 @@ func HandleMessageCreate(ctx context.Context, s *discordgo.Session, m *discordgo
 			return id == m.ChannelID
 		})
 		if !inAllowedChannel {
+			hasChannel := false
 			allowedExistentChannel := services.Translate("Config.NoChannelExistent", &userData, map[string]interface{}{
 				"Prefix": guildData.Prefix,
 			})
@@ -75,8 +76,18 @@ func HandleMessageCreate(ctx context.Context, s *discordgo.Session, m *discordgo
 				channel, err := s.State.Channel(id)
 				if err == nil {
 					allowedExistentChannel = channel.Mention()
+					hasChannel = true
 					break
 				}
+			}
+
+			if !hasChannel {
+				database.Guild.UpdateGuild(ctx, m.GuildID, func(g schemas.Guild) schemas.Guild {
+					g.CommandsChannels = []string{}
+					return g
+				})
+				discord.NewMessage(s, m.ChannelID, m.ID).WithContent(services.Translate("Config.TryAgain", &userData)).Send()
+				return
 			}
 
 			res := services.Translate("Config.WarnMessage", &userData, map[string]interface{}{
@@ -121,6 +132,17 @@ func InitMessageWorkers(s *discordgo.Session) {
 
 func GetFreeMessageWorkers() int64 {
 	return atomic.LoadInt64(&freeMessageWorkersCounter)
+}
+
+func mentionsClient(s *discordgo.Session, evt *discordgo.MessageCreate) bool {
+	if evt.ReferencedMessage != nil {
+		return false
+	}
+
+	if len(evt.Mentions) == 1 {
+		return evt.Mentions[0].ID == s.State.User.ID
+	}
+	return false
 }
 
 // func OnMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {

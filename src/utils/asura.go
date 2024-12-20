@@ -312,6 +312,9 @@ func GetRoostersNames(data interface{}) []Class {
 	roosters := make([]Class, 0)
 
 	if classList, ok := data.([]*Class); ok {
+		prototypes.SortSlice(classList, func(a, b *Class) bool {
+			return a.Rarity < b.Rarity
+		}, true)
 		for _, class := range classList {
 			roosters = append(roosters, Class{
 				Name:          class.Name,

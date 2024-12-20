@@ -1,6 +1,6 @@
 [Help]
-Description = "See My Commands"
-Footer = "Use {{.}}Help <command> To See More Information About A Command."
+Description = "See my commands"
+Footer = "Use {{.}}help <command> to see more information about a command."
 Title = "**Help**"
 Descriptionfield = "Description"
 Categoryfield = "Category"
@@ -13,11 +13,11 @@ Cooldownvalue = "{{.}} seconds"
 Title = "**About Command: {{.}}**"
 
 [Asura]
-Rooster = "Show Information About An Asura Rooster."
-Backgrounds = "Show Asura Backgrounds."
+Rooster = "Show information about an Asura rooster."
+Backgrounds = "Show Asura backgrounds."
 
 [Ping]
-Help = "Show Bot Ping."
+Help = "Show bot ping."
 
 [Language]
 Help = "Change the bot language."
@@ -45,6 +45,7 @@ NoChannels = "None."
 EmbedTitle = "Configurations"
 NoChannelExistent = "Use `{{.Prefix}}config` to configure it."
 WarnMessage = "You can only execute commands in: {{.AllowedChannel}}"
+TryAgain = "Since no configured channel exists anymore, I reset the settings.\nPlease use the command again."
 
 [BotInfo]
 Help = "Displays information about the bot."

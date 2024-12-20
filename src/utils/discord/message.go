@@ -26,6 +26,11 @@ func NewMessage(session *discordgo.Session, channelID, replyToID string) *Messag
 	}
 }
 
+func (m *MessageBuilder) WithButtons(components []discordgo.MessageComponent) *MessageBuilder {
+	m.Components = components
+	return m
+}
+
 func (m *MessageBuilder) WithButton(label string, customID string, style discordgo.ButtonStyle, emoji *discordgo.ComponentEmoji) *MessageBuilder {
 	button := discordgo.Button{
 		Label:    label,

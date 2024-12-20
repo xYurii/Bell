@@ -8,6 +8,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/xYurii/Bell/src/handler"
 	"github.com/xYurii/Bell/src/utils"
+	"github.com/xYurii/Bell/src/utils/discord"
 )
 
 func init() {
@@ -26,21 +27,28 @@ func runBackgrounds(ctx context.Context, s *discordgo.Session, m *discordgo.Mess
 	backgrounds := utils.GetBackgrounds()
 	background := backgrounds[page]
 
-	response := &discordgo.MessageSend{
-		Embed:      BuildEmbed(background, page, len(backgrounds)),
-		Components: CreateButtons(page, m.Author.ID),
-		Reference: &discordgo.MessageReference{
-			MessageID: m.ID,
-		},
-	}
+	buttons := CreateBackgroundsButtons(page, m.Author.ID)
 
-	_, err := s.ChannelMessageSendComplex(m.ChannelID, response)
-	if err != nil {
-		s.ChannelMessageSend(m.ChannelID, "Erro ao enviar o embed.")
-		return
-	}
+	reply := discord.NewMessage(s, m.ChannelID, m.ID).
+		WithEmbed(BuildBackgroundsEmbed(background, page, len(backgrounds))).
+		WithButtons(buttons)
+
+		// response := &discordgo.MessageSend{
+		// 	Embed:      BuildBackgroundsEmbed(background, page, len(backgrounds)),
+		// 	Components: CreateBackgroundsButtons(page, m.Author.ID),
+		// 	Reference: &discordgo.MessageReference{
+		// 		MessageID: m.ID,
+		// 	},
+		// }
+
+		/* _, err := */
+	reply.Send() // s.ChannelMessageSendComplex(m.ChannelID, response)
+	// if err != nil {
+	// 	s.ChannelMessageSend(m.ChannelID, "Erro ao enviar o embed.")
+	// 	return
+	// }
 }
-func BuildEmbed(background *utils.Cosmetic, page, backgroundsLen int) *discordgo.MessageEmbed {
+func BuildBackgroundsEmbed(background *utils.Cosmetic, page, backgroundsLen int) *discordgo.MessageEmbed {
 	return &discordgo.MessageEmbed{
 		Title: fmt.Sprintf("**%s** - **%s**", background.Name, background.Rarity.String()),
 		Image: &discordgo.MessageEmbedImage{
@@ -53,10 +61,15 @@ func BuildEmbed(background *utils.Cosmetic, page, backgroundsLen int) *discordgo
 	}
 }
 
-func CreateButtons(page int, userID string) []discordgo.MessageComponent {
+func CreateBackgroundsButtons(page int, userID string) []discordgo.MessageComponent {
 	return []discordgo.MessageComponent{
 		discordgo.ActionsRow{
 			Components: []discordgo.MessageComponent{
+				discordgo.Button{
+					Style:    discordgo.PrimaryButton,
+					CustomID: "backgrounds_first_" + strconv.Itoa(page) + "_" + userID,
+					Label:    "Home",
+				},
 				discordgo.Button{
 					Style:    discordgo.PrimaryButton,
 					CustomID: "backgrounds_previous_" + strconv.Itoa(page) + "_" + userID,
@@ -66,6 +79,11 @@ func CreateButtons(page int, userID string) []discordgo.MessageComponent {
 					Style:    discordgo.PrimaryButton,
 					CustomID: "backgrounds_next_" + strconv.Itoa(page) + "_" + userID,
 					Emoji:    &discordgo.ComponentEmoji{Name: "DoubleRightArrow", ID: "1272031913888059468"},
+				},
+				discordgo.Button{
+					Style:    discordgo.PrimaryButton,
+					CustomID: "backgrounds_last_" + strconv.Itoa(page) + "_" + userID,
+					Label:    "End",
 				},
 			},
 		},

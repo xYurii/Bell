@@ -41,9 +41,9 @@ func init() {
 		if files, err := os.ReadDir(basePath); err == nil {
 			for _, file := range files {
 				path := fmt.Sprintf("%s/%s", basePath, file.Name())
-				_, e := Bundle.LoadMessageFile(path)
-				if e != nil {
-					panic(e)
+				_, err = Bundle.LoadMessageFile(path)
+				if err != nil {
+					panic(err)
 				}
 			}
 		}

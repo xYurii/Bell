@@ -23,8 +23,9 @@ func changeLanguage(ctx context.Context, s *discordgo.Session, i *discordgo.Inte
 
 	database.User.UpdateUser(ctx, i.Member.User, func(u schemas.User) schemas.User {
 		u.Language = lang
-		res := services.Translate("Language.Success", &schemas.User{Language: lang}, lang)
-		handler.RespondInteraction(s, i.Interaction, discordgo.InteractionResponseChannelMessageWithSource, res, discordgo.MessageFlagsEphemeral)
 		return u
 	})
+
+	res := services.Translate("Language.Success", &schemas.User{Language: lang}, lang)
+	handler.RespondInteraction(s, i.Interaction, discordgo.InteractionResponseChannelMessageWithSource, res, discordgo.MessageFlagsEphemeral)
 }

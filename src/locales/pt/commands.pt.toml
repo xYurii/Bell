@@ -1,23 +1,23 @@
 [Help]
-Description = "Veja Os Meus Comandos"
-Footer = "Use {{.}}Help <comando> Para Ver Mais Informações Sobre Um Comando."
+Description = "Veja os meus comandos"
+Footer = "Use {{.}}Help <comando> para ver mais informações sobre um comando."
 Title = "**Ajuda**"
 Descriptionfield = "Descrição"
 Categoryfield = "Categoria"
 Aliasesfield = "Sinônimos"
-Usagefield = "Modo De Uso"
-Cooldownfield = "Tempo de Espera"
+Usagefield = "Modo de uso"
+Cooldownfield = "Tempo de espera"
 Cooldownvalue = "{{.}} segundos"
 
 [Aboutcommand]
-Title = "**Sobre O Comando: {{.}}**"
+Title = "**Sobre o comando: {{.}}**"
 
 [Asura]
-Rooster = "Mostra Informações Sobre Um Galo Do Asura."
-Backgrounds = "Mostra As Backgrounds Do Asura."
+Rooster = "Mostra informações sobre um galo do Asura."
+Backgrounds = "Mostra os backgrounds do Asura."
 
 [Ping]
-Help = "Mostra O Ping Do Bot."
+Help = "Mostra o ping do bot."
 
 [Language]
 Help = "Mude o idioma do bot."
@@ -45,6 +45,7 @@ NoChannels = "Nenhum."
 EmbedTitle = "Configurações"
 NoChannelExistent = "Use `{{.Prefix}}config` para configurar."
 WarnMessage = "Você só pode executar comandos em: {{.AllowedChannel}}"
+TryAgain = "Como nenhum canal configurado existe mais, eu resetei as configurações.\nUse o comando novamente."
 
 [BotInfo]
 Help = "Mostra informações sobre o bot."

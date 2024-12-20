@@ -33,7 +33,7 @@ func runBotInfo(ctx context.Context, s *discordgo.Session, m *discordgo.MessageC
 	if err != nil {
 		guild, err = s.Guild(m.GuildID)
 		if err != nil {
-			log.Fatal("ERRO NO FETCH DA GUILD: ", err)
+			log.Fatal(err)
 			return
 		}
 	}

@@ -46,6 +46,10 @@ func cosmectics(_ context.Context, s *discordgo.Session, i *discordgo.Interactio
 		newPage++
 	case "previous":
 		newPage--
+	case "last":
+		newPage = len(backgrounds) - 1
+	case "first":
+		newPage = 0
 	}
 
 	if newPage < 0 {
@@ -55,8 +59,8 @@ func cosmectics(_ context.Context, s *discordgo.Session, i *discordgo.Interactio
 	}
 
 	background := backgrounds[newPage]
-	newEmbed := commands.BuildEmbed(background, newPage, len(backgrounds))
-	newButtons := commands.CreateButtons(newPage, userID)
+	newEmbed := commands.BuildBackgroundsEmbed(background, newPage, len(backgrounds))
+	newButtons := commands.CreateBackgroundsButtons(newPage, userID)
 
 	msgEdit := &discordgo.MessageEdit{
 		Embeds:     &[]*discordgo.MessageEmbed{newEmbed},

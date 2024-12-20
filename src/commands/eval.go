@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/acnologla/interpreter"
 	"github.com/bwmarrin/discordgo"
@@ -16,21 +17,16 @@ func init() {
 	})
 
 	handler.RegisterCommand(handler.Command{
-		Name:        "eval",
-		Aliases:     []string{"ev"},
-		Cooldown:    5,
-		Run:         runEval,
-		Category:    "general",
-		Description: "Ping.Description",
-		Developer:   true,
+		Name:      "eval",
+		Aliases:   []string{"ev"},
+		Cooldown:  5,
+		Run:       runEval,
+		Developer: true,
 	})
 }
 
 func runEval(_ context.Context, s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
-	code := ""
-	for _, arg := range args {
-		code += arg + " "
-	}
+	code := strings.Join(args, " ")
 
 	msg_json, err := json.MarshalIndent(m, "", "  ")
 	if err != nil {

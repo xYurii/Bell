@@ -5,10 +5,6 @@ import (
 )
 
 func MemberHasPermission(s *discordgo.Session, m *discordgo.Message, permission int64) (bool, error) {
-	// member, err := s.GuildMember(guildId, userId)
-	// if err != nil {
-	// 	return false, err
-	// }
 	permissions, err := s.State.MessagePermissions(m)
 	if err != nil {
 		return false, err
