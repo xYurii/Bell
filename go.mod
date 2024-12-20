@@ -12,7 +12,14 @@ require (
 	github.com/BurntSushi/toml v1.4.0
 	github.com/acnologla/interpreter v0.0.0-20210104214054-12f2ca1c2202
 	github.com/nicksnyder/go-i18n/v2 v2.4.1
-	golang.org/x/text v0.19.0
+	golang.org/x/text v0.21.0
+)
+
+require (
+	github.com/fogleman/gg v1.3.0 // indirect
+	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
+	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646 // indirect
+	golang.org/x/image v0.23.0 // indirect
 )
 
 require (
