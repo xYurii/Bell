@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/xYurii/Bell/src/handler"
@@ -103,7 +104,7 @@ func runGuilds(ctx context.Context, s *discordgo.Session, m *discordgo.MessageCr
 				},
 			},
 		})
-	}, 0)
+	}, 5*time.Minute)
 }
 
 func formatGuildInfo(guild *discordgo.Guild) (text string) {

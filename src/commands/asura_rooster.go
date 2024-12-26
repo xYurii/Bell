@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/xYurii/Bell/src/handler"
@@ -155,7 +156,7 @@ func runAsuraRooster(_ context.Context, s *discordgo.Session, m *discordgo.Messa
 			}
 			s.InteractionRespond(i, response)
 		}
-	}, 0)
+	}, 1*time.Minute)
 }
 
 func showRoosterSkills(rooster *utils.Class, resets float64) string {
