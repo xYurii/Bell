@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"log/slog"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/uptrace/bun"
@@ -29,7 +30,10 @@ func (a *UserAdapter) GetUser(ctx context.Context, author *discordgo.User, relat
 
 	if user.ID == "" {
 		user.ID = author.ID
-		a.CreateUser(ctx, user)
+		err := a.CreateUser(ctx, user)
+		if err != nil {
+			slog.Info(err.Error())
+		}
 		user = a.GetUser(ctx, author, relations...)
 	}
 

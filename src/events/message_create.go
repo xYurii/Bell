@@ -57,7 +57,7 @@ func HandleMessageCreate(ctx context.Context, s *discordgo.Session, m *discordgo
 		return
 	}
 
-	if command.Developer && !prototypes.Includes(OwnersIDs, func(id string) bool {
+	if command.Developer && !prototypes.Includes(OwnersIDs[:], func(id string) bool {
 		return m.Author.ID == id
 	}) {
 		return

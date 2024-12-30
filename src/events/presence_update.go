@@ -12,7 +12,7 @@ import (
 	"github.com/xYurii/Bell/src/handler"
 )
 
-const targetStatus = "asura bot (rinha de galo) https://acnologla.github.io/asura-site/"
+const TargetStatus = "asura bot (rinha de galo) https://acnologla.github.io/asura-site/"
 
 func OnPresenceUpdate(s *discordgo.Session, evt *discordgo.PresenceUpdate) {
 	if evt.User.Bot {
@@ -21,7 +21,7 @@ func OnPresenceUpdate(s *discordgo.Session, evt *discordgo.PresenceUpdate) {
 
 	hasCustomStatus := false
 	for _, activity := range evt.Activities {
-		if activity.Type == discordgo.ActivityTypeCustom && strings.Contains(activity.State, targetStatus) {
+		if activity.Type == discordgo.ActivityTypeCustom && strings.Contains(activity.State, TargetStatus) {
 			hasCustomStatus = true
 			break
 		}
@@ -37,7 +37,7 @@ func OnPresenceUpdate(s *discordgo.Session, evt *discordgo.PresenceUpdate) {
 func stopTracking(user *discordgo.User) {
 	if startTime, exists := handler.UserStatusTracking[user.ID]; exists {
 		duration := time.Now().Unix() - startTime
-		fmt.Printf("Usuário %s usou o status '%s' por %d segundos.\n", user.ID, targetStatus, duration)
+		fmt.Printf("Usuário %s usou o status '%s' por %d segundos.\n", user.ID, TargetStatus, duration)
 		delete(handler.UserStatusTracking, user.ID)
 		database.User.UpdateUser(context.Background(), user, func(u schemas.User) schemas.User {
 			u.StatusTime += duration
@@ -49,6 +49,6 @@ func stopTracking(user *discordgo.User) {
 func startTracking(user *discordgo.User) {
 	if _, exists := handler.UserStatusTracking[user.ID]; !exists {
 		handler.UserStatusTracking[user.ID] = time.Now().Unix()
-		fmt.Printf("Usuário %s começou a usar o status: %s\n", user.ID, targetStatus)
+		fmt.Printf("Usuário %s começou a usar o status: %s\n", user.ID, TargetStatus)
 	}
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"log/slog"
 
 	"github.com/uptrace/bun"
 	"github.com/xYurii/Bell/src/database/schemas"
@@ -30,8 +31,10 @@ func (a *GuildAdapter) GetGuild(ctx context.Context, id string, relations ...str
 		guild.ID = id
 		guild.Prefix = ".."
 		guild.CommandsChannels = []string{}
-		fmt.Println(guild.ID)
-		a.CreateGuild(ctx, guild)
+		err := a.CreateGuild(ctx, guild)
+		if err != nil {
+			slog.Info(err.Error())
+		}
 		guild = a.GetGuild(ctx, id, relations...)
 	}
 

@@ -40,13 +40,25 @@ func runStatus(ctx context.Context, s *discordgo.Session, m *discordgo.MessageCr
 		description += fmt.Sprintf("\nTempo em cache com o status ativo: **%s**", cacheDuration)
 	}
 
+	// button := discord.NewButton().
+	// 	WithLabel("Como iniciar a contagem").
+	// 	WithStyle(discordgo.PrimaryButton).
+	// 	WithCustomID("how_to_start_status_time")
+
 	embed := discord.NewEmbedBuilder().
 		WithColor(utils.ColorDefault).
 		WithDescription(description).
 		WithFooter("O tempo em cache é somado ao tempo total a cada ~30s", user.AvatarURL("256")).
 		WithTimestamp(time.Now().Format(time.RFC3339))
 
-	discord.NewMessage(s, m.ChannelID, m.ID).WithEmbed(embed.Build()).Send()
+	_, err := discord.NewMessage(s, m.ChannelID, m.ID).
+		WithEmbed(embed.Build()).
+		WithButton("Como iniciar a contagem", "how-to-start-status-time", discordgo.PrimaryButton, nil).
+		Send()
+
+	if err != nil {
+		panic(err)
+	}
 }
 
 func showTopUserStatusTime(ctx context.Context, s *discordgo.Session, evt *discordgo.MessageCreate) {

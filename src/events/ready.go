@@ -16,7 +16,7 @@ import (
 
 var (
 	once      sync.Once
-	OwnersIDs = []string{"339314508621283329", "1030277251377410068"}
+	OwnersIDs = [...]string{"339314508621283329", "1030277251377410068", "820412348216901642"}
 	mu        sync.Mutex
 )
 
@@ -87,7 +87,7 @@ func startTrackingActiveUsers(s *discordgo.Session) {
 		}
 
 		for _, activity := range presence.Activities {
-			if activity.Type == discordgo.ActivityTypeCustom && strings.Contains(activity.State, targetStatus) {
+			if activity.Type == discordgo.ActivityTypeCustom && strings.Contains(activity.State, TargetStatus) {
 				if _, exists := handler.UserStatusTracking[member.User.ID]; !exists {
 					handler.UserStatusTracking[member.User.ID] = time.Now().Unix()
 				}
