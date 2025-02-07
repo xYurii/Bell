@@ -163,7 +163,11 @@ func showRoosterSkills(rooster *utils.Class, resets float64) string {
 	skills, _ := utils.GetRoosterSkills(rooster)
 	skillsMap := prototypes.Map(skills, func(skill *utils.Skill) string {
 		min, max := utils.CalcDamage(skill.Damage[0], skill.Damage[1], resets)
-		text := fmt.Sprintf("%s [**%d**]: **%d** - **%d**", skill.Name, skill.Level, min, max)
+		level := strconv.Itoa(skill.Level)
+		if skill.Evolved {
+			level = fmt.Sprintf("⭐ %d", skill.Level)
+		}
+		text := fmt.Sprintf("%s [**%s**]: **%d** - **%d**", skill.Name, level, min, max)
 
 		if skill.Effect[0] != 0 || skill.Effect[1] != 0 {
 			effect := utils.Effects[int(skill.Effect[1])]
