@@ -14,12 +14,14 @@ import (
 
 func OnMemberJoin(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 	guildId := os.Getenv("SUPPORT_GUILD")
+	fmt.Println(m.GuildID, guildId)
 	if m.GuildID != guildId {
 		return
 	}
 
 	channel, err := s.UserChannelCreate(m.User.ID)
 	if err != nil {
+		fmt.Println("não deu pra criar DM", err.Error())
 		return
 	}
 
