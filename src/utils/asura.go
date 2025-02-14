@@ -31,15 +31,15 @@ const (
 )
 
 func (rarity Rarity) String() string {
-	return [...]string{"Comum", "Raro", "Epico", "Lendario", "Especial", "Mitico"}[rarity]
+	return [...]string{"Comum", "Raro", "Epico", "Lendario", "Especial", "Mitico", "Deus"}[rarity]
 }
 
 func (rarity Rarity) Price() int {
-	return [...]int{30, 160, 500, 1200, 500, 3000}[rarity]
+	return [...]int{30, 160, 500, 1200, 500, 3000, 5000}[rarity]
 }
 
 func (rarity Rarity) Color() int {
-	return [...]int{13493247, 255, 9699539, 16748544, 16728128, 16777201}[rarity]
+	return [...]int{13493247, 255, 9699539, 16748544, 16728128, 16777201, 16711935}[rarity]
 }
 
 type Effect struct {
