@@ -38,6 +38,7 @@ func main() {
 	s.AddHandler(events.OnMessageCreate)
 	s.AddHandler(events.OnInteractionCreate)
 	s.AddHandler(events.OnPresenceUpdate)
+	s.AddHandler(events.OnMemberJoin)
 
 	if err := s.Start(); err != nil {
 		log.Fatalf("Error starting shards: %v", err)
