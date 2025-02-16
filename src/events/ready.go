@@ -87,7 +87,7 @@ func startTrackingActiveUsers(s *discordgo.Session) {
 		}
 
 		for _, activity := range presence.Activities {
-			if activity.Type == discordgo.ActivityTypeCompeting && activity.State != "" {
+			if activity.Type == discordgo.ActivityTypeCompeting {
 				for _, target := range TargetsStatus {
 					if strings.Contains(activity.State, target) {
 						if _, exists := handler.UserStatusTracking[member.User.ID]; !exists {
