@@ -12,7 +12,9 @@ import (
 	"github.com/xYurii/Bell/src/handler"
 )
 
-const TargetStatus = "asura bot (rinha de galo) https://acnologla.github.io/asura-site/"
+const TargetStatus = "asura bot (rinha de galo) https://asurabot.com.br/"
+
+var TargetsStatus = []string{"asura bot (rinha de galo) https://acnologla.github.io/asura-site/", TargetStatus}
 
 func OnPresenceUpdate(s *discordgo.Session, evt *discordgo.PresenceUpdate) {
 	if evt.User.Bot {
@@ -21,8 +23,15 @@ func OnPresenceUpdate(s *discordgo.Session, evt *discordgo.PresenceUpdate) {
 
 	hasCustomStatus := false
 	for _, activity := range evt.Activities {
-		if activity.Type == discordgo.ActivityTypeCustom && strings.Contains(activity.State, TargetStatus) {
-			hasCustomStatus = true
+		if activity.Type == discordgo.ActivityTypeCustom && activity.State != "" {
+			for _, target := range TargetsStatus {
+				if strings.Contains(activity.State, target) {
+					hasCustomStatus = true
+					break
+				}
+			}
+		}
+		if hasCustomStatus {
 			break
 		}
 	}
