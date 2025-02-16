@@ -87,12 +87,22 @@ func startTrackingActiveUsers(s *discordgo.Session) {
 		}
 
 		for _, activity := range presence.Activities {
-			if activity.Type == discordgo.ActivityTypeCustom && strings.Contains(activity.State, TargetStatus) {
-				if _, exists := handler.UserStatusTracking[member.User.ID]; !exists {
-					handler.UserStatusTracking[member.User.ID] = time.Now().Unix()
+			if activity.Type == discordgo.ActivityTypeCompeting && activity.State != "" {
+				for _, target := range TargetsStatus {
+					if strings.Contains(activity.State, target) {
+						if _, exists := handler.UserStatusTracking[member.User.ID]; !exists {
+							handler.UserStatusTracking[member.User.ID] = time.Now().Unix()
+						}
+						break
+					}
 				}
-				break
 			}
+			// if activity.Type == discordgo.ActivityTypeCustom && strings.Contains(activity.State, TargetStatus) {
+			// 	if _, exists := handler.UserStatusTracking[member.User.ID]; !exists {
+			// 		handler.UserStatusTracking[member.User.ID] = time.Now().Unix()
+			// 	}
+			// 	break
+			// }
 		}
 	}
 	log.Printf("Status tracking initialized with %d active users.", len(handler.UserStatusTracking))
