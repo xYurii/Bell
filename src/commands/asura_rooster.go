@@ -35,14 +35,15 @@ func runAsuraRooster(_ context.Context, s *discordgo.Session, m *discordgo.Messa
 		discordgo.ActionsRow{
 			Components: []discordgo.MessageComponent{
 				discordgo.Button{
-					Label:    "Skins",
-					Style:    discordgo.PrimaryButton,
-					CustomID: "skins",
-				},
-				discordgo.Button{
 					Label:    "Habilidades",
 					Style:    discordgo.SecondaryButton,
 					CustomID: "skills",
+				},
+				discordgo.Button{
+					Label:    "Skins - Desativado temporariamente",
+					Style:    discordgo.DangerButton,
+					CustomID: "skins",
+					Disabled: true,
 				},
 			},
 		},
@@ -88,7 +89,7 @@ func runAsuraRooster(_ context.Context, s *discordgo.Session, m *discordgo.Messa
 		return
 	}
 
-	roosters, err := utils.GetRoostersClasses("https://raw.githubusercontent.com/Acnologla/asura/master/resources/galo/class.json")
+	roosters, err := utils.GetRoostersClasses("https://raw.githubusercontent.com/Acnologla/asura-site/main/public/resources/class.json")
 
 	if err != nil {
 		response.Content = "Eu não consegui buscar a lista dos nomes dos galos... Tente novamente."
@@ -113,7 +114,7 @@ func runAsuraRooster(_ context.Context, s *discordgo.Session, m *discordgo.Messa
 		return strings.EqualFold(rooster.Name, roosterName)
 	})
 
-	roostersSprites, _ := utils.GetRoostersSprites("https://raw.githubusercontent.com/Acnologla/asura/master/resources/galo/sprites.json")
+	roostersSprites, _ := utils.GetRoostersSprites("https://raw.githubusercontent.com/Acnologla/asura-site/main/public/resources/sprites.json")
 
 	roosterIndex := prototypes.FindIndex(allValidRoosters, func(rooster utils.Class) bool {
 		return strings.EqualFold(rooster.Name, roosterName)

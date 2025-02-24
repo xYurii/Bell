@@ -54,7 +54,6 @@ type Effect struct {
 
 type Class struct {
 	Name          string `json:"name"`
-	Desc          string `json:"desc"`
 	Disadvantages []int  `json:"disadvantages"`
 	Rarity        Rarity `json:"rarity"`
 }
@@ -138,9 +137,9 @@ func GetCosmetics() ([]*Cosmetic, error) {
 	}
 
 	urls := []string{
-		"https://raw.githubusercontent.com/Acnologla/asura/master/resources/galo/cosmetics.json",
-		"https://raw.githubusercontent.com/Acnologla/asura/master/resources/galo/newCosmetics.json",
-		"https://raw.githubusercontent.com/Acnologla/asura/master/resources/galo/skins.json",
+		"https://raw.githubusercontent.com/Acnologla/asura-site/main/public/resources/cosmetics.json",
+		"https://raw.githubusercontent.com/Acnologla/asura-site/main/public/resources/newCosmetics.json",
+		"https://raw.githubusercontent.com/Acnologla/asura-site/main/public/resources/skins.json",
 	}
 
 	var allCosmetics []*Cosmetic
@@ -179,7 +178,7 @@ func GetEffects() ([]*Effect, error) {
 		return Effects, nil
 	}
 
-	url := "https://raw.githubusercontent.com/Acnologla/asura/master/resources/galo/effects.json"
+	url := "https://raw.githubusercontent.com/Acnologla/asura-site/main/public/resources/effects.json"
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, fmt.Errorf("erro ao fazer requisição: %v", err)
@@ -221,7 +220,7 @@ func GetRoosterSkills(rooster *Class) ([]*Skill, error) {
 	}
 	skillsCache.Unlock()
 
-	url := fmt.Sprintf("https://raw.githubusercontent.com/Acnologla/asura/master/resources/galo/attacks/%s.json", rooster.Name)
+	url := fmt.Sprintf("https://raw.githubusercontent.com/Acnologla/asura-site/main/public/resources/attacks/%s.json", rooster.Name)
 
 	resp, err := http.Get(url)
 	if err != nil {
@@ -237,8 +236,9 @@ func GetRoosterSkills(rooster *Class) ([]*Skill, error) {
 	var skills []*Skill
 
 	err = json.Unmarshal(body, &skills)
+	fmt.Println("Response Body:", string(body))
 	if err != nil {
-		return nil, fmt.Errorf("error unmarshalling json: %w", err)
+		return nil, fmt.Errorf("error unmarshalling json at GetRoosterSkills: %w", err)
 	}
 
 	skillsCache.Lock()
@@ -295,13 +295,14 @@ func GetRoostersClasses(url string) (interface{}, error) {
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
+
 	if err != nil {
 		return nil, fmt.Errorf("error reading body: %w", err)
 	}
 
 	err = json.Unmarshal(body, &Roosters)
 	if err != nil {
-		return nil, fmt.Errorf("error unmarshalling json: %w", err)
+		return nil, fmt.Errorf("error unmarshalling json at GetRoostersClasses func: %w", err)
 	}
 
 	cache.data[url] = Roosters
