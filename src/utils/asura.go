@@ -236,7 +236,6 @@ func GetRoosterSkills(rooster *Class) ([]*Skill, error) {
 	var skills []*Skill
 
 	err = json.Unmarshal(body, &skills)
-	fmt.Println("Response Body:", string(body))
 	if err != nil {
 		return nil, fmt.Errorf("error unmarshalling json at GetRoosterSkills: %w", err)
 	}
