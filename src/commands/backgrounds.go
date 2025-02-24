@@ -23,6 +23,7 @@ func init() {
 }
 
 func runBackgrounds(ctx context.Context, s *discordgo.Session, m *discordgo.MessageCreate, _ []string) {
+	return
 	page := 0
 	backgrounds := utils.GetBackgrounds()
 	background := backgrounds[page]
@@ -33,20 +34,7 @@ func runBackgrounds(ctx context.Context, s *discordgo.Session, m *discordgo.Mess
 		WithEmbed(BuildBackgroundsEmbed(background, page, len(backgrounds))).
 		WithButtons(buttons)
 
-		// response := &discordgo.MessageSend{
-		// 	Embed:      BuildBackgroundsEmbed(background, page, len(backgrounds)),
-		// 	Components: CreateBackgroundsButtons(page, m.Author.ID),
-		// 	Reference: &discordgo.MessageReference{
-		// 		MessageID: m.ID,
-		// 	},
-		// }
-
-		/* _, err := */
-	reply.Send() // s.ChannelMessageSendComplex(m.ChannelID, response)
-	// if err != nil {
-	// 	s.ChannelMessageSend(m.ChannelID, "Erro ao enviar o embed.")
-	// 	return
-	// }
+	reply.Send()
 }
 func BuildBackgroundsEmbed(background *utils.Cosmetic, page, backgroundsLen int) *discordgo.MessageEmbed {
 	return &discordgo.MessageEmbed{
