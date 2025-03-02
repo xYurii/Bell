@@ -46,7 +46,7 @@ func main() {
 
 	handler.ReadyAt = time.Now()
 	// load the asura roosters effects and cosmetics:
-	// utils.GetCosmetics()
+	utils.GetCosmetics()
 	utils.GetEffects()
 
 	sigch := make(chan os.Signal, 1)

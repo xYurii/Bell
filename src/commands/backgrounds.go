@@ -23,7 +23,7 @@ func init() {
 }
 
 func runBackgrounds(ctx context.Context, s *discordgo.Session, m *discordgo.MessageCreate, _ []string) {
-	return
+	// return
 	page := 0
 	backgrounds := utils.GetBackgrounds()
 	background := backgrounds[page]

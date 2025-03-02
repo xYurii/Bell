@@ -40,10 +40,9 @@ func runAsuraRooster(_ context.Context, s *discordgo.Session, m *discordgo.Messa
 					CustomID: "skills",
 				},
 				discordgo.Button{
-					Label:    "Skins - Desativado temporariamente",
-					Style:    discordgo.DangerButton,
+					Label:    "Skins",
+					Style:    discordgo.SuccessButton,
 					CustomID: "skins",
-					Disabled: true,
 				},
 			},
 		},
@@ -168,17 +167,22 @@ func showRoosterSkills(rooster *utils.Class, resets float64) string {
 		if skill.Evolved {
 			level = fmt.Sprintf("⭐ %d", skill.Level)
 		}
-		text := fmt.Sprintf("%s [**%s**]: **%d** - **%d**", skill.Name, level, min, max)
+		// text := fmt.Sprintf("%s [**%s**]: **%d** - **%d**", skill.Name, level, min, max)
+		text := fmt.Sprintf("[**%s**] **%s** ➜ **%d** - **%d**", level, skill.Name, min, max)
 
 		if skill.Effect[0] != 0 || skill.Effect[1] != 0 {
 			effect := utils.Effects[int(skill.Effect[1])]
 			minEffect, maxEffect := utils.CalcDamage(effect.Range[0], effect.Range[1], resets)
 			turns := effect.Turns
 			turnsText := ""
+			self := ""
 			if turns > 0 {
 				turnsText = fmt.Sprintf(" (%d turnos)", turns)
 			}
-			text += fmt.Sprintf("\nTem %d%% de Chance de causar **%s** [**%d** - **%d**]%s", int(skill.Effect[0]*100), effect.Name, minEffect, maxEffect, turnsText)
+			if effect.Self {
+				self = "em si mesmo"
+			}
+			text += fmt.Sprintf("\nTem %d%% de Chance de causar **%s** %s [**%d** - **%d**]%s", int(skill.Effect[0]*100), effect.Name, self, minEffect, maxEffect, turnsText)
 		}
 
 		return text
@@ -208,23 +212,20 @@ func showRoosterSkins(s *discordgo.Session, i *discordgo.Interaction, roosterInd
 		}
 	}
 
-	if len(embeds) > 0 {
-		response := &discordgo.InteractionResponse{
-			Type: discordgo.InteractionResponseChannelMessageWithSource,
-			Data: &discordgo.InteractionResponseData{
-				Embeds: embeds,
-				Flags:  discordgo.MessageFlagsEphemeral,
-			},
-		}
-		s.InteractionRespond(i, response)
-	} else {
-		response := &discordgo.InteractionResponse{
-			Type: discordgo.InteractionResponseChannelMessageWithSource,
-			Data: &discordgo.InteractionResponseData{
-				Content: "Nenhuma skin encontrada.",
-				Flags:   discordgo.MessageFlagsEphemeral,
-			},
-		}
-		s.InteractionRespond(i, response)
+	response := &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Content: "Nenhuma skin encontrada.",
+			Flags:   discordgo.MessageFlagsEphemeral,
+		},
 	}
+
+	if len(embeds) > 0 {
+		response.Data = &discordgo.InteractionResponseData{
+			Embeds: embeds,
+			Flags:  discordgo.MessageFlagsEphemeral,
+		}
+	}
+
+	s.InteractionRespond(i, response)
 }

@@ -18,7 +18,7 @@ func init() {
 }
 
 func allRoostersNames(_ context.Context, s *discordgo.Session, i *discordgo.InteractionCreate) {
-	roosters, err := utils.GetRoostersClasses("https://raw.githubusercontent.com/Acnologla/asura/master/resources/galo/class.json")
+	roosters, err := utils.GetRoostersClasses("https://raw.githubusercontent.com/Acnologla/asura-site/main/public/resources/class.json")
 
 	if err != nil {
 		res := "Não foi possível obter os nomes dos galos!"
